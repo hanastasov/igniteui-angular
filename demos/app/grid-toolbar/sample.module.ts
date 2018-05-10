@@ -12,23 +12,17 @@ import {
     IgxSwitchModule,
     IgxToastModule
 } from "../../lib/main";
+import { GridToolbarSampleComponent } from "./sample.component";
 import { PageHeaderModule } from "../pageHeading/pageHeading.module";
-import { GridSampleComponent } from "./sample.component";
-
-import {
-    IgxExcelExporterService,
-    IgxCsvExporterService
-} from "../../lib/services/index";
 
 @NgModule({
     declarations: [
-        GridSampleComponent
+        GridToolbarSampleComponent
     ],
     imports: [
         FormsModule,
         CommonModule,
         IgxGridModule,
-        PageHeaderModule,
         IgxCardModule,
         IgxSnackbarModule,
         IgxSwitchModule,
@@ -36,10 +30,8 @@ import {
         IgxCheckboxModule,
         IgxButtonModule,
         IgxRippleModule,
-        IgxInputGroupModule
-    ], providers: [
-        IgxExcelExporterService,
-        IgxCsvExporterService
+        IgxInputGroupModule,
+        PageHeaderModule
     ]
 })
-export class GridSampleModule { }
+export class GridToolbarSampleModule {}

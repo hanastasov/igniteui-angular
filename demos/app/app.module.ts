@@ -19,6 +19,7 @@ import { CarouselSampleModule } from "./carousel/sample.module";
 import { IgxDatePickerSampleModule } from "./date-picker/sample.module";
 import { DialogSampleModule } from "./dialog/sample.module";
 import { MaskSampleModule } from "./directives/mask/sample.module";
+import { GridToolbarSampleModule } from "./grid-toolbar/sample.module"
 import { GridColumnPinningSampleModule } from "./grid-column-pinning/sample.module";
 import { GridPerformanceSampleModule } from "./grid-performance/sample.module";
 import { GridSummarySampleModule } from "./grid-summaries/sample.module";
@@ -75,6 +76,7 @@ import { VirtualForSampleModule } from "./virtual-for-directive/sample.module";
         InputGroupSampleModule,
         IconSampleModule,
         GridSampleModule,
+        GridToolbarSampleModule,
         GridColumnPinningSampleModule,
         GridPerformanceSampleModule,
         GridSummarySampleModule,

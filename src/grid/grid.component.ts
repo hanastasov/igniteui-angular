@@ -40,6 +40,7 @@ import { IgxGridCellComponent } from "./cell.component";
 import { IgxColumnComponent } from "./column.component";
 import { ISummaryExpression } from "./grid-summary";
 import { IgxGridRowComponent } from "./row.component";
+import { IgxGridToolbarComponent } from "./grid-toolbar.component";
 
 let NEXT_ID = 0;
 const DEBOUNCE_TIME = 16;
@@ -68,6 +69,12 @@ export interface IPageEventArgs {
 
 export interface IRowDataEventArgs {
     data: any;
+}
+
+export interface IGridToolbarExportEventArgs {
+    grid: IgxGridComponent;
+    type: string;
+    cancel: boolean;
 }
 
 /**
@@ -267,6 +274,27 @@ export class IgxGridComponent implements OnInit, OnDestroy, AfterContentInit, Af
         this._sortingExpressions = cloneArray(value);
         this.cdr.markForCheck();
     }
+
+
+
+    /* Toolbar related definitions */
+
+    @ViewChild("ttoolbar", { read: IgxGridToolbarComponent })
+    public toolbar: IgxGridToolbarComponent = null;
+
+    @Input()
+    public showToolbar: boolean = false;
+
+    @Input()
+    public toolbarTitle: string = null;
+
+    @Input()
+    public showToolbarExport: boolean = false;
+
+    @Output()
+    public onToolbarExportClicked = new EventEmitter<IGridToolbarExportEventArgs>();
+
+    /* End of toolbar related definitions */
 
     public pagingState;
     public calcWidth: number;

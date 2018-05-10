@@ -1,3 +1,8 @@
+<div class="igx-grid__caption" role="rowgroup" style="display:block" [style.width.px]="calcWidth" *ngIf="showToolbar">
+    <igx-grid-toolbar [gridID]="id" #ttoolbar>
+    </igx-grid-toolbar>
+</div>
+
 <ng-template #defaultPager let-api>
     <ng-container *ngIf="api.paging && api.totalPages > 0">
         <button [disabled]="api.isFirstPage" (click)="api.paginate(0)" igxButton="icon" igxRipple igxRippleCentered="true">

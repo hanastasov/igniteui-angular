@@ -71,6 +71,11 @@ export class AppComponent implements OnInit {
             name: "Grid"
         },
         {
+            link: "/gridToolbar",
+            icon: "view_column",
+            name: "Grid Toolbar"
+        },
+        {
             link: "/gridColumnPinning",
             icon: "view_column",
             name: "Grid Column Pinning"

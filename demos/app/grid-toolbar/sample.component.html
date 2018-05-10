@@ -1,0 +1,36 @@
+<div class="sample-wrapper">
+    <page-header title="Grid Toolbar" description="Displays a dedicated caption area which includes functional buttons."></page-header>
+    <section class="sample-content">
+        <article class="grid-sample">
+
+            <!-- <div class="toggles-container">
+                Toggel Grid Toolbar's Buttons
+                <div class="toggle-group">
+                    <div class="switch-group">
+                        <span igxLabel>Column Chooser</span>
+                        <igx-switch [(ngModel)]="grid1.toolbar.showColumnChooser"></igx-switch>
+                    </div>
+                    <div class="switch-group">
+                        <span igxLabel>Pinning Chooser</span>
+                        <igx-switch [(ngModel)]="grid1.toolbar.showPinningChooser"></igx-switch>
+                    </div>
+                </div>
+            </div> -->
+
+            <igx-grid #grid1 [data]="data" [autoGenerate]="true" height="400px" width="650px" [showToolbar]="true" toolbarTitle="abcd"
+            
+            (onToolbarExportClicked)="toolbarExportClicked($event)"
+            
+            >
+            </igx-grid>
+
+            <button (click)="buttonClicked()">Test</button>
+
+        </article>
+    </section>
+
+
+
+
+
+</div>

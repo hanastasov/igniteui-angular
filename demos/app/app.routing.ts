@@ -12,6 +12,7 @@ import { CarouselSampleComponent } from "./carousel/sample.component";
 import { IgxDatePickerSampleComponent } from "./date-picker/sample.component";
 import { DialogSampleComponent } from "./dialog/sample.component";
 import { MaskSampleComponent } from "./directives/mask/sample.component";
+import { GridToolbarSampleComponent } from "./grid-toolbar/sample.component"
 import { GridColumnPinningSampleComponent } from "./grid-column-pinning/sample.component";
 import { GridPerformanceSampleComponent } from "./grid-performance/sample.component";
 import { GridSummaryComponent } from "./grid-summaries/sample.component";
@@ -107,6 +108,10 @@ const appRoutes: Routes = [
     {
         component: GridSampleComponent,
         path: "grid"
+    },
+    {
+        component: GridToolbarSampleComponent,
+        path: "gridToolbar"
     },
     {
         component: GridColumnPinningSampleComponent,
