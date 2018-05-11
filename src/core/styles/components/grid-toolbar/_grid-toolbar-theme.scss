@@ -1,0 +1,84 @@
+////
+/// @group themes
+/// @access public
+/// @author <a href="https://github.com/simeonoff" target="_blank">Simeon Simeonoff</a>
+/// @author <a href="https://github.com/desig9stein" target="_blank">Marin Popov</a>
+////
+/// @param {Color} $background-color [null] - The toolbar background color.
+/// @param {Color} $label-color [null] - The toolbar label color.
+/// @param {Color} $result-color [null] - The toolbar value/result color.
+/// @param {Color} $border-color [null] - The toolbar border color.
+/// @param {Color} $inactive-color [null] - The toolbar inactive label color color.
+///
+/// @example scss Change the toolbar background nad labels color
+///   $my-toolbar-theme: igx-grid-toolbar-theme(
+///     $background-color: black,
+///     $label-color: white
+///   );
+///   // Pass the theme to the igx-grid-filtering component mixin
+///   @include igx-grid-toolbar($my-toolbar-theme);
+
+@function igx-grid-toolbar-theme(
+    $background-color: null
+) {
+    @return (
+        background-color: $background-color
+    );
+}
+
+/// @param {Map} $theme - The theme used to style the component.
+/// @param {Map} $palette [$default-palette] - The palette used as basis for styling the component.
+/// @requires igx-grid-toolbar-theme
+/// @requires igx-color
+@mixin igx-grid-toolbar($theme, $palette: $default-palette) {
+    $default-theme: igx-grid-toolbar-theme(
+        $background-color: rgba(0, 0, 0, .02)
+    );
+
+    $this: extend($default-theme, $theme);
+
+    // Caption
+    $grid-toolbar-fs: rem(20px);
+    $grid-toolbar-padding: rem(8px) rem(24px);
+
+    %igx-grid-toolbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        grid-row: 1;
+        font-size: $grid-toolbar-fs;
+        padding: $grid-toolbar-padding;
+        border-bottom: 1px solid igx-color($palette, 'grays', 300);
+        background: map_get($this, 'background-color');
+    }
+
+    [dir='rtl'] {
+        %igx-grid-toolbar {
+            flex-direction: row-reverse;
+        }
+    }
+
+    %grid-caption {
+        display: flex;
+        align-items: center;
+
+    }
+
+    %igx-grid-toolbar__title {
+        flex: 1 1 auto;
+    }
+
+    %igx-grid-toolbar__actions {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    %igx-grid-toolbar__dropdown {
+        position: relative;
+    }
+}
+
+
+
+

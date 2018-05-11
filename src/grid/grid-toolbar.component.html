@@ -1,39 +1,42 @@
-
-
-<span class="igx-grid__caption-title" *ngIf="hasTitle()">
+<span class="igx-grid-toolbar__title" *ngIf="hasTitle()">
     {{ getTitle() }}
 </span>
 
-<igx-toast #igxGridToolbarToastComp [message]="igxGridToolbarToastMessage"></igx-toast>
+<div class="igx-grid-toolbar__actions">
+    <button igxButton="flat" igxRipple igxRippleCentered="true" #btnColumnChooser
+            *ngIf="showColumnChooserButton"
+            (click)="columnChooserClicked()">
+        <igx-icon fontSet="material" name="remove_red_eye"></igx-icon>
+        {{ hiddenColumnsCount }} hidden
+    </button>
 
-<button igxButton="flat" igxRipple igxRippleCentered="true" #btnColumnChooser
-    *ngIf="showColumnChooserButton"
-    (click)="columnChooserClicked()">
-    <igx-icon fontSet="material" name="remove_red_eye"></igx-icon>
-    {{ hiddenColumnsCount }} hidden
-</button>
+    <!--
+    <button igxButton="flat" igxRipple igxRippleCentered="true" #btnAdvFiltering
+        *ngIf="showAdvFilteringButton"
+        (click)="advFilteringClicked()">
+        <igx-icon fontSet="material" name="filter_list"></igx-icon>
+        Adv. Filtering
+    </button>
+    -->
 
-<!--
-<button igxButton="flat" igxRipple igxRippleCentered="true" #btnAdvFiltering
-    *ngIf="showAdvFilteringButton"
-    (click)="advFilteringClicked()">
-    <igx-icon fontSet="material" name="filter_list"></igx-icon>
-    Adv. Filtering
-</button>
--->
+    <div class="igx-grid-toolbar__dropdown">
+        <button igxButton="flat" igxRipple igxRippleCentered="true" #btnExport
+                *ngIf="showExportButton"
+                (click)="exportClicked()">
+            <igx-icon fontSet="material" name="import_export"></igx-icon>
+            Export
+            <igx-icon fontSet="material" name="arrow_drop_down"></igx-icon>
+        </button>
 
-<button igxButton="flat" igxRipple igxRippleCentered="true" #btnExport
-    *ngIf="showExportButton"
-    (click)="exportClicked()">
-    <igx-icon fontSet="material" name="import_export"></igx-icon>
-    Export
-    <igx-icon fontSet="material" name="arrow_drop_down"></igx-icon>
-</button>
-<span igxToggle (onOpen)="exportPopupOpened()" (onClose)="exportPopupClosed()" #directive="toggle" class="igx-filtering__options--to-right">
-    <div class="igx-exporting__options-bgroup">
-        <button igxButton igxRipple (click)="exportToExcelClicked()">Export to Excel</button><br />
-        <button igxButton igxRipple (click)="exportToCsvClicked()">Export to CSV</button>
+        <span igxToggle (onOpen)="exportPopupOpened()" (onClose)="exportPopupClosed()" #directive="toggle" class="igx-filtering__options--to-right">
+        <div class="igx-exporting__options-bgroup">
+            <button igxButton igxRipple (click)="exportToExcelClicked()">Export to Excel</button><br />
+            <button igxButton igxRipple (click)="exportToCsvClicked()">Export to CSV</button>
+        </div>
+    </span>
     </div>
-</span>
+</div>
+
+<igx-toast #igxGridToolbarToastComp [message]="igxGridToolbarToastMessage"></igx-toast>
 
 

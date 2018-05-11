@@ -11,10 +11,6 @@
 
     @extend %grid-display !optional;
 
-    @include e(caption) {
-        @extend %grid-caption !optional;
-    }
-
     @include e(thead) {
         @extend %grid-thead !optional;
 

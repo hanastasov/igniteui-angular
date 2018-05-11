@@ -7,7 +7,7 @@ import {
     Component,
     ContentChild,
     Directive,
-    ElementRef,
+    ElementRef, HostBinding,
     //HostBinding,
     //HostListener,
     Input,
@@ -36,7 +36,7 @@ import { IgxExcelExporterService, IgxExcelExporterOptions, IgxCsvExporterService
     templateUrl: "./grid-toolbar.component.html"
 })
 export class IgxGridToolbarComponent implements IGridBus, OnInit, OnDestroy, AfterViewInit {
-
+    @HostBinding("class.igx-grid-toolbar")
     @Input()
     public gridID: string;
 
@@ -115,9 +115,9 @@ export class IgxGridToolbarComponent implements IGridBus, OnInit, OnDestroy, Aft
     public get hiddenColumnsCount(): number {
         return 0;
     }
-    
 
-    
+
+
 
     constructor(public gridAPI: IgxGridAPIService,
                 public cdr: ChangeDetectorRef,

@@ -122,11 +122,6 @@
     $grid-br: 2px;
     $grid-shadow: igx-elevation($elevations, 2);
 
-    // Caption
-    $grid-caption-fs: rem(20px);
-    $grid-caption-lh: rem(32px);
-    $grid-caption-padding: rem(16px) rem(24px);
-
     // Heading
     $grid-head-fs: rem(12px);
     $grid-head-fw: 600;
@@ -180,15 +175,6 @@
                 background: rgba(text-contrast(map-get($this, 'content-background')), .37);
             }
         }
-    }
-
-    %grid-caption {
-        display: flex;
-        align-items: center;
-        font-size: $grid-caption-fs;
-        line-height: $grid-caption-lh;
-        padding: $grid-caption-padding;
-        grid-row: 1;
     }
 
     %grid-thead i {
