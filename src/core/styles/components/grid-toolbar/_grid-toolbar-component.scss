@@ -22,4 +22,9 @@
     @include e(dropdown){
         @extend %igx-grid-toolbar__dropdown !optional;
     }
+
+    @include e(export-options-items){
+        @extend %igx-grid-toolbar__export-options-items !optional;
+    }
+
 }

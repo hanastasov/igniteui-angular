@@ -29,10 +29,10 @@
         </button>
 
         <span igxToggle (onOpen)="exportPopupOpened()" (onClose)="exportPopupClosed()" #directive="toggle" class="igx-filtering__options--to-right">
-        <div class="igx-exporting__options-bgroup">
-            <button igxButton igxRipple (click)="exportToExcelClicked()">Export to Excel</button><br />
-            <button igxButton igxRipple (click)="exportToCsvClicked()">Export to CSV</button>
-        </div>
+        <ul class="igx-grid-toolbar__export-options">
+            <li class="igx-grid-toolbar__export-options-items" igxRipple (click)="exportToExcelClicked()">Export to Excel</li>
+            <li class="igx-grid-toolbar__export-options-items" igxRipple (click)="exportToCsvClicked()">Export to CSV</li>
+        </ul>
     </span>
     </div>
 </div>
