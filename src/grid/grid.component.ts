@@ -41,6 +41,7 @@ import { IgxColumnComponent } from "./column.component";
 import { ISummaryExpression } from "./grid-summary";
 import { IgxGridRowComponent } from "./row.component";
 import { IgxGridToolbarComponent } from "./grid-toolbar.component";
+import { IgxBaseExporter } from "../services/index";
 
 let NEXT_ID = 0;
 const DEBOUNCE_TIME = 16;
@@ -73,6 +74,7 @@ export interface IRowDataEventArgs {
 
 export interface IGridToolbarExportEventArgs {
     grid: IgxGridComponent;
+    exporter: IgxBaseExporter;
     type: string;
     cancel: boolean;
 }
@@ -289,10 +291,22 @@ export class IgxGridComponent implements OnInit, OnDestroy, AfterContentInit, Af
     public toolbarTitle: string = null;
 
     @Input()
-    public showToolbarExport: boolean = false;
+    public toolbarExportExcel: boolean = false;
+
+    @Input()
+    public toolbarExportCsv: boolean = false;
+
+    @Input()
+    public exportText: string = null;
+
+    @Input()
+    public exportExcelText: string = null;
+
+    @Input()
+    public exportCsvText: string = null;
 
     @Output()
-    public onToolbarExportClicked = new EventEmitter<IGridToolbarExportEventArgs>();
+    public onToolbarExporting = new EventEmitter<IGridToolbarExportEventArgs>();
 
     /* End of toolbar related definitions */
 

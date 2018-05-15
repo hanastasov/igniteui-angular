@@ -1,4 +1,4 @@
-<span class="igx-grid-toolbar__title" *ngIf="hasTitle()">
+<span class="igx-grid-toolbar__title">
     {{ getTitle() }}
 </span>
 
@@ -10,30 +10,23 @@
         {{ hiddenColumnsCount }} hidden
     </button>
 
-    <!--
-    <button igxButton="flat" igxRipple igxRippleCentered="true" #btnAdvFiltering
-        *ngIf="showAdvFilteringButton"
-        (click)="advFilteringClicked()">
-        <igx-icon fontSet="material" name="filter_list"></igx-icon>
-        Adv. Filtering
-    </button>
-    -->
-
     <div class="igx-grid-toolbar__dropdown">
         <button igxButton="flat" igxRipple igxRippleCentered="true" #btnExport
-                *ngIf="showExportButton"
+                *ngIf="shouldShowExportButton"
                 (click)="exportClicked()">
             <igx-icon fontSet="material" name="import_export"></igx-icon>
-            Export
+            {{ getExportText() }}
             <igx-icon fontSet="material" name="arrow_drop_down"></igx-icon>
         </button>
 
-        <span igxToggle (onOpen)="exportPopupOpened()" (onClose)="exportPopupClosed()" #directive="toggle" class="igx-filtering__options--to-right">
-        <ul class="igx-grid-toolbar__export-options">
-            <li class="igx-grid-toolbar__export-options-items" igxRipple (click)="exportToExcelClicked()">Export to Excel</li>
-            <li class="igx-grid-toolbar__export-options-items" igxRipple (click)="exportToCsvClicked()">Export to CSV</li>
-        </ul>
-    </span>
+        <span igxToggle #directive="toggle" class="igx-filtering__options--to-right">
+            <ul class="igx-grid-toolbar__export-options">
+                <li class="igx-grid-toolbar__export-options-items" igxRipple *ngIf="shouldShowExportExcelButton"
+                (click)="exportToExcelClicked()">{{ getExportExcelText() }}</li>
+                <li class="igx-grid-toolbar__export-options-items" igxRipple *ngIf="shouldShowExportCsvButton"
+                (click)="exportToCsvClicked()">{{ getExportCsvText() }}</li>
+            </ul>
+        </span>
     </div>
 </div>
 

@@ -30,17 +30,17 @@ export class GridToolbarSampleComponent implements OnInit {
 
     buttonClicked() {
         
-        console.log("@@@ this.igxGrid1.toolbar : " + this.igxGrid1.toolbar);
-        console.log(this.igxGrid1.toolbar);
+        //console.log("@@@ this.igxGrid1.toolbar : " + this.igxGrid1.toolbar);
+        //console.log(this.igxGrid1.toolbar);
 
-        console.log("@@@ this.igxGrid1.toolbar.columnChooserButton : " + this.igxGrid1.toolbar.columnChooserButton);
-        console.log(this.igxGrid1.toolbar.columnChooserButton);
+        //console.log("@@@ this.igxGrid1.toolbar.columnChooserButton : " + this.igxGrid1.toolbar.columnChooserButton);
+        //console.log(this.igxGrid1.toolbar.columnChooserButton);
         
-        console.log("@@@ this.igxGrid1.toolbar.advFilteringButton : " + this.igxGrid1.toolbar.advFilteringButton);
-        console.log(this.igxGrid1.toolbar.advFilteringButton);
+        //console.log("@@@ this.igxGrid1.toolbar.advFilteringButton : " + this.igxGrid1.toolbar.advFilteringButton);
+        //console.log(this.igxGrid1.toolbar.advFilteringButton);
         
-        console.log("@@@ this.igxGrid1.toolbar.exportButton : " + this.igxGrid1.toolbar.exportButton);
-        console.log(this.igxGrid1.toolbar.exportButton);
+        //console.log("@@@ this.igxGrid1.toolbar.exportButton : " + this.igxGrid1.toolbar.exportButton);
+        //console.log(this.igxGrid1.toolbar.exportButton);
 
 
 

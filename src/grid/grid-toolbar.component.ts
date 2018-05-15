@@ -1,23 +1,15 @@
 import {
-    AfterContentInit,
-    AfterViewInit,
-
-    //ChangeDetectionStrategy,
     ChangeDetectorRef,
     Component,
     ContentChild,
     Directive,
-    ElementRef, HostBinding,
-    //HostBinding,
-    //HostListener,
+    ElementRef,
+    HostBinding,
     Input,
-    OnDestroy,
-    OnInit,
     Optional,
     TemplateRef,
     ViewChild
 } from "@angular/core";
-
 
 import { IgxGridAPIService } from "./api.service";
 import { autoWire, IGridBus } from "./grid.common";
@@ -27,31 +19,17 @@ import { IgxToggleDirective } from "../directives/toggle/toggle.directive";
 import { IgxToastComponent } from "../toast/toast.component";
 import { IgxExcelExporterService, IgxExcelExporterOptions, IgxCsvExporterService, IgxCsvExporterOptions, CsvFileTypes } from "../services/index";
 
-
-
-
-
 @Component({
     selector: "igx-grid-toolbar",
     templateUrl: "./grid-toolbar.component.html"
 })
-export class IgxGridToolbarComponent implements IGridBus, OnInit, OnDestroy, AfterViewInit {
+export class IgxGridToolbarComponent implements IGridBus {
+
     @HostBinding("class.igx-grid-toolbar")
     @Input()
     public gridID: string;
 
 
-
-    public hasTitle(): boolean {
-        const igxGrid = this.gridAPI.get(this.gridID);
-        return (igxGrid != null && igxGrid.toolbarTitle != null);
-    }
-
-    public getTitle(): string {
-        const igxGrid = this.gridAPI.get(this.gridID);
-        //console.log("@@@ getTitle(): '" + igxGrid.toolbarTitle + "'");
-        return igxGrid.toolbarTitle;
-    }
 
 
 
@@ -73,14 +51,19 @@ export class IgxGridToolbarComponent implements IGridBus, OnInit, OnDestroy, Aft
         return true;
     }
 
-    public get showExportButton(): boolean {
-        return true;
+    public get shouldShowExportButton(): boolean {
+        const igxGrid = this.gridAPI.get(this.gridID);
+        return (igxGrid != null && (igxGrid.toolbarExportExcel || igxGrid.toolbarExportCsv));
+    }
 
-        // const igxGrid = this.gridAPI.get(this.gridID);
-        // if (igxGrid != null) {
-        //     return igxGrid.showToolbarExport;
-        // }
-        // return false;
+    public get shouldShowExportExcelButton(): boolean {
+        const igxGrid = this.gridAPI.get(this.gridID);
+        return igxGrid.toolbarExportExcel;
+    }
+
+    public get shouldShowExportCsvButton(): boolean {
+        const igxGrid = this.gridAPI.get(this.gridID);
+        return igxGrid.toolbarExportCsv;
     }
 
 
@@ -88,27 +71,18 @@ export class IgxGridToolbarComponent implements IGridBus, OnInit, OnDestroy, Aft
 
 
 
-
+    // these three should be replaced with properties to set the text
 
     @ViewChild("btnColumnChooser", { read: ElementRef})
     public columnChooserButton: ElementRef;
 
     @ViewChild("btnAdvFiltering", { read: ElementRef})
     public advFilteringButton: ElementRef;
-
-
     @ViewChild("btnExport", { read: ElementRef})
     public exportButton: ElementRef;
 
 
 
-
-
-
-
-
-    //@ViewChild("ttoolbar", { read: IgxGridToolbarComponent })
-    //public toolbar: IgxGridToolbarComponent;
 
 
 
@@ -123,58 +97,30 @@ export class IgxGridToolbarComponent implements IGridBus, OnInit, OnDestroy, Aft
                 public cdr: ChangeDetectorRef,
                 @Optional() public excelExporter: IgxExcelExporterService,
                 @Optional() public csvExporter: IgxCsvExporterService) {
-
-        console.log("@@@ IgxGridToolbarComponent constructor");
-        console.log("@@@ excelExporter:" + this.excelExporter);
-        console.log("@@@ csvExporter:" + this.csvExporter);
-
-
-
-    }
-
-
-
-    public ngOnInit() {
-        //const igxGrid = this.gridAPI.get(this.gridID);
-        //console.log("@@@ igxGridToolbar.ngOnInit: " + igxGrid);
-
-// subsribe to below
-      //  @Output()
-      //  public onColumnPinning = new EventEmitter<IPinColumnEventArgs>();
-
-
-    //   this.chunkLoaded = this.gridAPI.get(this.gridID).headerContainer.onChunkPreload.subscribe(() => {
-    //     if (!this.toggleDirective.collapsed) {
-    //         this.toggleDirective.collapsed = true;
-    //         this.refresh();
-    //     }
-    // });
-
-
-
-    }
-
-    public ngOnDestroy() {
-
-        // unsubscribe from onColumnPinning
-    }
-
-
-    public ngAfterContentInit() {
-        //console.log("@@@ igxGridToolbar.ngAfterContentInit: " + this.gridID);
-    }
-
-    public ngAfterViewInit() {
-        //console.log("@@@ igxGridToolbar.ngAfterViewInit: " + this.gridID);
-        this.cdr.detectChanges();
     }
 
 
 
 
+    public getTitle(): string {
+        const igxGrid = this.gridAPI.get(this.gridID);
+        return igxGrid != null ? igxGrid.toolbarTitle : "";
+    }
 
+    public getExportText(): string {
+        const igxGrid = this.gridAPI.get(this.gridID);
+        return igxGrid != null ? igxGrid.exportText : "";
+    }
 
+    public getExportExcelText(): string {
+        const igxGrid = this.gridAPI.get(this.gridID);
+        return igxGrid != null ? igxGrid.exportExcelText : "";
+    }
 
+    public getExportCsvText(): string {
+        const igxGrid = this.gridAPI.get(this.gridID);
+        return igxGrid != null ? igxGrid.exportCsvText : "";
+    }
 
 
 
@@ -194,56 +140,27 @@ export class IgxGridToolbarComponent implements IGridBus, OnInit, OnDestroy, Aft
         console.log("@@@ igxGridToolbar.advFilteringClicked");
     }
 
-
-
-
-    public exportPopupOpened() {
-        console.log("@@@ igxGridToolbar.exportPopupOpened");
-
-    }
-
-    public exportPopupClosed() {
-        console.log("@@@ igxGridToolbar.exportPopupClosed");
-
-    }
-
-
-
-
-
-
-
-
-
     public exportClicked() {
-        console.log("@@@ igxGridToolbar.exportClicked");
-        // toggle popup
         this.toggleDirective.collapsed = !this.toggleDirective.collapsed;
     }
-
-
 
     public exportToExcelClicked() {
-        console.log("@@@ igxGridToolbar.exportToExcelClicked");
         this.toggleDirective.collapsed = !this.toggleDirective.collapsed;
         const igxGrid = this.gridAPI.get(this.gridID);
-        const args = { grid: igxGrid, type: "excel", cancel: false };
-        igxGrid.onToolbarExportClicked.emit(args);
+        const args = { grid: igxGrid, exporter: this.excelExporter, type: "excel", cancel: false };
+        igxGrid.onToolbarExporting.emit(args);
         if (args.cancel) return;
-        // toast here ...
         this.toastComp.show();
         console.log(this.excelExporter);
         this.excelExporter.export(igxGrid, new IgxExcelExporterOptions("ExportedData"));
     }
 
     public exportToCsvClicked() {
-        console.log("@@@ igxGridToolbar.exportToCsvClicked");
         this.toggleDirective.collapsed = !this.toggleDirective.collapsed;
         const igxGrid = this.gridAPI.get(this.gridID);
-        const args = { grid: igxGrid, type: "csv", cancel: false };
-        igxGrid.onToolbarExportClicked.emit(args);
+        const args = { grid: igxGrid, exporter: this.csvExporter, type: "csv", cancel: false };
+        igxGrid.onToolbarExporting.emit(args);
         if (args.cancel) return;
-        // toast here ...
         this.toastComp.show();
         console.log(this.csvExporter);
         this.csvExporter.export(igxGrid, new IgxCsvExporterOptions("ExportedData", CsvFileTypes.CSV))
@@ -255,17 +172,6 @@ export class IgxGridToolbarComponent implements IGridBus, OnInit, OnDestroy, Aft
     public get igxGridToolbarToastMessage() {
         return "Exporting starts...";
     }
-
-
-/*
-    @Output()
-    public onToolbarExportToExcelClicked = new EventEmitter<IGridToolbarExportEventArgs>();
-
-    @Output()
-    public onToolbarExportToCsvClicked = new EventEmitter<IGridToolbarExportEventArgs>();
-*/
-
-
 
 
 
