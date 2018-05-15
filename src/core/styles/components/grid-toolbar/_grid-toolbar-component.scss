@@ -27,4 +27,8 @@
         @extend %igx-grid-toolbar__export-options-items !optional;
     }
 
+    @include e(button-space){
+        @extend %igx-grid-toolbar__button-space !optional;
+    }
 }
+

@@ -6,30 +6,36 @@
     <button igxButton="flat" igxRipple igxRippleCentered="true" #btnColumnChooser
             *ngIf="showColumnChooserButton"
             (click)="columnChooserClicked()">
-        <igx-icon fontSet="material" name="remove_red_eye"></igx-icon>
-        {{ hiddenColumnsCount }} hidden
+        <div class="igx-grid-toolbar__button-space">
+            <igx-icon fontSet="material" name="remove_red_eye"></igx-icon>
+            <span>{{ hiddenColumnsCount }}</span>
+            <span>hidden</span>
+        </div>
+
     </button>
 
     <div class="igx-grid-toolbar__dropdown">
         <button igxButton="flat" igxRipple igxRippleCentered="true" #btnExport
                 *ngIf="shouldShowExportButton"
                 (click)="exportClicked()">
-            <igx-icon fontSet="material" name="import_export"></igx-icon>
-            {{ getExportText() }}
-            <igx-icon fontSet="material" name="arrow_drop_down"></igx-icon>
+            <div class="igx-grid-toolbar__button-space">
+                <igx-icon fontSet="material" name="import_export"></igx-icon>
+                <span class="igx-grid-toolbar__button-space">{{ getExportText() }}</span>
+                <igx-icon fontSet="material" name="arrow_drop_down"></igx-icon>
+            </div>
         </button>
 
-        <span igxToggle #directive="toggle" class="igx-filtering__options--to-right">
+        <div igxToggle #directive="toggle" class="igx-filtering__options--to-right">
             <ul class="igx-grid-toolbar__export-options">
                 <li class="igx-grid-toolbar__export-options-items" igxRipple *ngIf="shouldShowExportExcelButton"
                 (click)="exportToExcelClicked()">{{ getExportExcelText() }}</li>
                 <li class="igx-grid-toolbar__export-options-items" igxRipple *ngIf="shouldShowExportCsvButton"
                 (click)="exportToCsvClicked()">{{ getExportCsvText() }}</li>
             </ul>
-        </span>
+        </div>
     </div>
 </div>
 
-<igx-toast #igxGridToolbarToastComp [message]="igxGridToolbarToastMessage"></igx-toast>
+<!--<igx-toast #igxGridToolbarToastComp [message]="igxGridToolbarToastMessage"></igx-toast>-->
 
 

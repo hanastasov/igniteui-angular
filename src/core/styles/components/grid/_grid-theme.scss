@@ -202,7 +202,7 @@
     }
 
     %grid-tfoot {
-        grid-row: 5;
+        grid-row: 4;
         border-top: 1px dotted igx-color($palette, 'grays', 400);
     }
 
@@ -257,7 +257,7 @@
     %grid-scroll {
         display: flex;
         flex-flow: row nowrap;
-        grid-row: 6;
+        grid-row: 5;
         width: 100%;
         background: map-get($this, 'content-background');
     }
