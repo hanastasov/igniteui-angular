@@ -3,7 +3,7 @@
 </span>
 
 <div class="igx-grid-toolbar__actions">
-    <button igxButton="flat" igxRipple igxRippleCentered="true" #btnColumnChooser
+    <button igxButton="flat" igxRipple #btnColumnChooser
             *ngIf="showColumnChooserButton"
             (click)="columnChooserClicked()">
         <div class="igx-grid-toolbar__button-space">
@@ -15,7 +15,7 @@
     </button>
 
     <div class="igx-grid-toolbar__dropdown">
-        <button igxButton="flat" igxRipple igxRippleCentered="true" #btnExport
+        <button igxButton="flat" igxRipple #btnExport
                 *ngIf="shouldShowExportButton"
                 (click)="exportClicked()">
             <div class="igx-grid-toolbar__button-space">
@@ -25,11 +25,11 @@
             </div>
         </button>
 
-        <div igxToggle #directive="toggle" class="igx-filtering__options--to-right">
-            <ul class="igx-grid-toolbar__export-options">
-                <li class="igx-grid-toolbar__export-options-items" igxRipple *ngIf="shouldShowExportExcelButton"
+        <div igxToggle #directive="toggle" class="igx-filtering__options--to-left">
+            <ul class="igx-grid-toolbar__dd-list">
+                <li class="igx-grid-toolbar__dd-list-items" igxRipple *ngIf="shouldShowExportExcelButton"
                 (click)="exportToExcelClicked()">{{ getExportExcelText() }}</li>
-                <li class="igx-grid-toolbar__export-options-items" igxRipple *ngIf="shouldShowExportCsvButton"
+                <li class="igx-grid-toolbar__dd-list-items" igxRipple *ngIf="shouldShowExportCsvButton"
                 (click)="exportToCsvClicked()">{{ getExportCsvText() }}</li>
             </ul>
         </div>
