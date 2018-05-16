@@ -14,10 +14,9 @@
 
     </button>
 
-    <div class="igx-grid-toolbar__dropdown">
+    <div class="igx-grid-toolbar__dropdown" *ngIf="shouldShowExportButton">
         <button igxButton="flat" igxRipple igxRippleCentered="true" #btnExport
-                *ngIf="shouldShowExportButton"
-                (click)="exportClicked()">
+            (click)="exportClicked()">
             <div class="igx-grid-toolbar__button-space">
                 <igx-icon fontSet="material" name="import_export"></igx-icon>
                 <span class="igx-grid-toolbar__button-space">{{ getExportText() }}</span>

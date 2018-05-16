@@ -5,57 +5,73 @@ import { By } from "@angular/platform-browser";
 import { IgxGridToolbarComponent } from "./grid-toolbar.component";
 import { IgxGridComponent } from "./grid.component";
 import { IgxGridModule } from "./index";
+import { AnimationBuilder } from "@angular/animations";
 
-fdescribe("IgxGrid - Grid Toolbar", () => {
+describe("IgxGrid - Grid Toolbar", () => {
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [
-                GridToolbarTestPageComponent,
+                GridToolbarTestPage1Component,
+                GridToolbarTestPage2Component
                 //IgxGridCaptionComponent,
                 //IgxGridComponent
             ],
             imports: [
                 //IgxGridCaptionComponent,
                 IgxGridModule.forRoot()
+            ],
+            providers: [
+                AnimationBuilder
             ]
         })
         .compileComponents();
     }));
 
-    it(" testing title ", () => {
-        const fixture = TestBed.createComponent(GridToolbarTestPageComponent);
+    it(" testing toolbar title ", () => {
+        const fixture = TestBed.createComponent(GridToolbarTestPage1Component);
         fixture.detectChanges();
-        
         const testPage = fixture.componentInstance;
-        
-        expect(testPage.gridToolbar1.hasTitle).toBe(false);
-        //expect(testPage.gridToolbar1.hasTitle).toBeTruthy();
-        testPage.gridToolbar1.titleContent = "Some title";
-        expect(testPage.gridToolbar1.hasTitle).toBe(true);
-        testPage.gridToolbar1.titleContent = null;
-        expect(testPage.gridToolbar1.hasTitle).toBe(false);
 
+        let initialTitleValue = "Grid Toobar Title";
+        let newTitleValue: string = "Some other title";
 
         const grid = fixture.debugElement.query(By.css("igx-grid"));
-
-
-        const gridToolbar = grid.query(By.css(".igx-grid__caption"));
-
-        const gridToolbarTitle = grid.children[0].query(By.css(".igx-grid__caption-title"));
-
-
-
+        const gridToolbar = grid.query(By.css("igx-grid-toolbar"));
+        const gridToolbarTitle = gridToolbar.query(By.css(".igx-grid-toolbar__title"));
         
+        expect(testPage.grid1.toolbarTitle).toBe(initialTitleValue);
+        expect(gridToolbarTitle.nativeElement.innerText).toBe(initialTitleValue);
 
-        // console.log("@@@ 1:" + grid);
-        // console.log("@@@ 2:" + gridCaption);
-        console.log(grid);
-        console.log(gridToolbar);
-        console.log(gridToolbarTitle);
+        testPage.grid1.toolbarTitle = newTitleValue;
+        testPage.grid1.cdr.detectChanges();
+        fixture.detectChanges();
 
+        expect(testPage.grid1.toolbarTitle).toBe(newTitleValue);
+        expect(gridToolbarTitle.nativeElement.innerText).toBe(newTitleValue);
+    });
 
+    it(" testing export button visibility", () => {
+        const fixture = TestBed.createComponent(GridToolbarTestPage2Component);
+        fixture.detectChanges();
 
+        const testPage = fixture.componentInstance;
+        const grid = fixture.debugElement.query(By.css("igx-grid"));
+        const gridToolbar = grid.query(By.css("igx-grid-toolbar"));
+
+        //let exportButton = gridToolbar.query(By.css(".igx-grid-toolbar__dropdown"));
+        //expect(exportButton).not.toBe(null);
+
+        //testPage.grid1.toolbarExportExcel = false;
+
+        //exportButton = gridToolbar.query(By.css(".igx-grid-toolbar__dropdown"));
+        //expect(exportButton).toBe(null);
+
+        //console.log(grid);
+        //console.log(gridToolbar);
+        //console.log(gridDropDownPanel);
+
+        //console.log(gridToolbarTitle.nativeElement.innerText);
 
     });
 
@@ -68,13 +84,14 @@ fdescribe("IgxGrid - Grid Toolbar", () => {
 
 @Component({
     template: `
-        <igx-grid #grid1 [data]="data" [autoGenerate]="true" width="400" height="200">
-            <igx-grid-toolbar #gridToolbar1 titleContent="first title">
-            </igx-grid-toolbar>
+        <igx-grid #grid1 [data]="data" [autoGenerate]="true" width="400" height="200"
+            [showToolbar]="true"
+            toolbarTitle="Grid Toobar Title"
+            >
         </igx-grid>
     `
 })
-export class GridToolbarTestPageComponent {
+export class GridToolbarTestPage1Component {
 
     public data = [
         { ProductID: 1, ProductName: "Chai", InStock: true, UnitsInStock: 2760, OrderDate: new Date("2005-03-21") },
@@ -92,10 +109,36 @@ export class GridToolbarTestPageComponent {
     @ViewChild("grid1", { read: IgxGridComponent })
     public grid1: IgxGridComponent;
 
-    @ViewChild("gridToolbar1", { read: IgxGridToolbarComponent })
-    public gridToolbar1: IgxGridToolbarComponent;
-
 }
 
 
+@Component({
+    template: `
+        <igx-grid #grid1 [data]="data" [autoGenerate]="true" width="400" height="200"
+            [showToolbar]="true"
+            toolbarTitle="Grid Toobar Title"
+            [toolbarExportExcel]="true"
+            >
+        </igx-grid>
+    `
+})
+//
+export class GridToolbarTestPage2Component {
 
+    public data = [
+        { ProductID: 1, ProductName: "Chai", InStock: true, UnitsInStock: 2760, OrderDate: new Date("2005-03-21") },
+        { ProductID: 2, ProductName: "Aniseed Syrup", InStock: false, UnitsInStock: 198, OrderDate: new Date("2008-01-15") },
+        { ProductID: 3, ProductName: "Chef Antons Cajun Seasoning", InStock: true, UnitsInStock: 52, OrderDate: new Date("2010-11-20") },
+        { ProductID: 4, ProductName: "Grandmas Boysenberry Spread", InStock: false, UnitsInStock: 0, OrderDate: new Date("2007-10-11") },
+        { ProductID: 5, ProductName: "Uncle Bobs Dried Pears", InStock: false, UnitsInStock: 0, OrderDate: new Date("2001-07-27") },
+        { ProductID: 6, ProductName: "Northwoods Cranberry Sauce", InStock: true, UnitsInStock: 1098, OrderDate: new Date("1990-05-17") },
+        { ProductID: 7, ProductName: "Queso Cabrales", InStock: false, UnitsInStock: 0, OrderDate: new Date("2005-03-03") },
+        { ProductID: 8, ProductName: "Tofu", InStock: true, UnitsInStock: 7898, OrderDate: new Date("2017-09-09") },
+        { ProductID: 9, ProductName: "Teatime Chocolate Biscuits", InStock: true, UnitsInStock: 6998, OrderDate: new Date("2025-12-25") },
+        { ProductID: 10, ProductName: "Chocolate", InStock: true, UnitsInStock: 20000, OrderDate: new Date("2018-03-01") }
+    ];
+
+    @ViewChild("grid1", { read: IgxGridComponent })
+    public grid1: IgxGridComponent;
+
+}
