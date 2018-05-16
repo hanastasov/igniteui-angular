@@ -75,9 +75,6 @@ describe("IgxGrid - Grid Toolbar", () => {
 
     });
 
-
-
-
 });
 
 
