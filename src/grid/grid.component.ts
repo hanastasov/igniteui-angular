@@ -44,6 +44,8 @@ import { IgxColumnComponent } from "./column.component";
 import { ISummaryExpression } from "./grid-summary";
 import { IgxGridSortingPipe } from "./grid.pipes";
 import { IgxGridRowComponent } from "./row.component";
+import { IgxGridToolbarComponent } from "./grid-toolbar.component";
+import { IgxBaseExporter } from "../services/index";
 
 let NEXT_ID = 0;
 const DEBOUNCE_TIME = 16;
@@ -74,6 +76,13 @@ export interface IPageEventArgs {
 
 export interface IRowDataEventArgs {
     data: any;
+}
+
+export interface IGridToolbarExportEventArgs {
+    grid: IgxGridComponent;
+    exporter: IgxBaseExporter;
+    type: string;
+    cancel: boolean;
 }
 
 export interface IColumnResizeEventArgs {
@@ -418,6 +427,37 @@ export class IgxGridComponent implements OnInit, OnDestroy, AfterContentInit, Af
         this.verticalScrollContainer.totalItemCount = count;
         this.cdr.detectChanges();
     }
+
+    /* Toolbar related definitions */
+
+    @ViewChild("toolbar", { read: IgxGridToolbarComponent })
+    public toolbar: IgxGridToolbarComponent = null;
+
+    @Input()
+    public showToolbar: false;
+
+    @Input()
+    public toolbarTitle: null;
+
+    @Input()
+    public toolbarExportExcel: false;
+
+    @Input()
+    public toolbarExportCsv: false;
+
+    @Input()
+    public exportText: null;
+
+    @Input()
+    public exportExcelText: null;
+
+    @Input()
+    public exportCsvText: null;
+
+    @Output()
+    public onToolbarExporting = new EventEmitter<IGridToolbarExportEventArgs>();
+
+    /* End of toolbar related definitions */
 
     public pagingState;
     public calcWidth: number;
