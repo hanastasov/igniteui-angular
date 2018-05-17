@@ -2,8 +2,11 @@ import { transition, trigger, useAnimation } from "@angular/animations";
 import { CommonModule } from "@angular/common";
 import {
     Component,
+    ContentChild,
     ElementRef,
     EventEmitter,
+    forwardRef,
+    HostBinding,
     Input,
     NgModule,
     OnDestroy,
@@ -18,6 +21,8 @@ import { fadeIn, fadeOut, slideInBottom } from "../animations/main";
 import { IgxNavigationService, IToggleView } from "../core/navigation";
 import { IgxButtonModule } from "../directives/button/button.directive";
 import { IgxRippleModule } from "../directives/ripple/ripple.directive";
+import { IgxDialogActionsDirective, IgxDialogTitleDirective } from "./dialog.directives";
+
 /**
  * **Ignite UI for Angular Dialog Window** -
  * [Documentation](https://www.infragistics.com/products/ignite-ui-angular/angular/components/dialog.html)
@@ -41,6 +46,7 @@ import { IgxRippleModule } from "../directives/ripple/ripple.directive";
  * </igx-dialog>
  * ```
  */
+let DIALOG_ID = 0;
 @Component({
     animations: [
         trigger("fadeInOut", [
@@ -58,8 +64,9 @@ export class IgxDialogComponent implements IToggleView, OnInit, OnDestroy {
     private static NEXT_ID = 1;
     private static readonly DIALOG_CLASS = "igx-dialog";
 
+    @HostBinding("attr.id")
     @Input()
-    public id: string;
+    public id = `igx-dialog-${DIALOG_ID++}`;
 
     @Input()
     public title = "";
@@ -105,7 +112,13 @@ export class IgxDialogComponent implements IToggleView, OnInit, OnDestroy {
         return this.elementRef.nativeElement;
     }
 
-    @ViewChild("dialog") public dialogEl: ElementRef;
+    /**
+     * The default `tabindex` attribute for the component
+     *
+     * @hidden
+     */
+    @HostBinding("attr.tabindex")
+    public tabindex = -1;
 
     private _isOpen = false;
     private _titleId: string;
@@ -211,8 +224,8 @@ export interface IDialogEventArgs {
 }
 
 @NgModule({
-    declarations: [IgxDialogComponent],
-    exports: [IgxDialogComponent],
+    declarations: [IgxDialogComponent, IgxDialogTitleDirective, IgxDialogActionsDirective],
+    exports: [IgxDialogComponent, IgxDialogTitleDirective, IgxDialogActionsDirective],
     imports: [CommonModule, IgxButtonModule, IgxRippleModule]
 })
 export class IgxDialogModule { }

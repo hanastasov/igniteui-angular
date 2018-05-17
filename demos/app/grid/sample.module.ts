@@ -14,11 +14,7 @@ import {
 } from "../../lib/main";
 import { PageHeaderModule } from "../pageHeading/pageHeading.module";
 import { GridSampleComponent } from "./sample.component";
-
-import {
-    IgxExcelExporterService,
-    IgxCsvExporterService
-} from "../../lib/services/index";
+import { IgxCsvExporterService, IgxExcelExporterService } from "../../lib/services/index";
 
 @NgModule({
     declarations: [

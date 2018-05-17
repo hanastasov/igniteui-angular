@@ -14,7 +14,7 @@ import {
     Self
 } from "@angular/core";
 import { FormGroup, FormsModule, NgControl, NgModel } from "@angular/forms";
-import { Subscription } from "rxjs/Subscription";
+import { Subscription } from "rxjs";
 import { IgxInputGroupComponent } from "../../main";
 
 const nativeValidationAttributes = ["required", "pattern", "minlength", "maxlength", "min", "max", "step"];
@@ -46,6 +46,16 @@ export class IgxInputDirective implements AfterViewInit, OnDestroy {
     }
     get value() {
         return this.nativeElement.value;
+    }
+
+    @Input()
+    public set disabled(value: boolean) {
+        this.nativeElement.disabled = value;
+        this.inputGroup.isDisabled = value;
+    }
+
+    public get disabled() {
+        return this.nativeElement.hasAttribute("disabled");
     }
 
     @HostBinding("class.igx-input-group__input")
@@ -131,15 +141,6 @@ export class IgxInputDirective implements AfterViewInit, OnDestroy {
         if (!this.ngModel.control.pristine && (this.ngModel.validator || this.ngModel.asyncValidator)) {
             this._valid = this.ngModel.valid ? IgxInputState.VALID : IgxInputState.INVALID;
         }
-    }
-
-    public get disabled() {
-        return this.nativeElement.hasAttribute("disabled");
-    }
-
-    public set disabled(value: boolean) {
-        this.nativeElement.disabled = value;
-        this.inputGroup.isDisabled = value;
     }
 
     public get required() {

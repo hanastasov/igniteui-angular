@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { Subject } from "rxjs/Subject";
+import { Subject } from "rxjs";
 import { cloneArray } from "../core/utils";
 import { DataUtil } from "../data-operations/data-util";
 import { IFilteringExpression } from "../data-operations/filtering-expression.interface";
@@ -27,16 +27,23 @@ export class IgxGridAPIService {
     public get_column_by_name(id: string, name: string): IgxColumnComponent {
         return this.get(id).columnList.find((col) => col.field === name);
     }
+
     public set_summary_by_column_name(id: string, name: string) {
         if (!this.summaryCacheMap.get(id)) {
             this.summaryCacheMap.set(id, new Map<string, any[]>());
         }
         const column = this.get_column_by_name(id, name);
-        if (!this.summaryCacheMap.get(id).get(column.field)) {
-            this.summaryCacheMap.get(id).set(column.field,
-                column.summaries.operate(this.get(id).data.map((rec) => rec[column.field])));
+        if (this.get(id).filteredData) {
+            if (this.get(id).filteredData.length > 0) {
+                this.calculateSummaries(id, column, this.get(id).filteredData.map((rec) => rec[column.field]));
+            } else {
+                this.calculateSummaries(id, column, this.get(id).filteredData.map((rec) => rec[column.field]));
+            }
+        } else {
+            this.calculateSummaries(id, column, this.get(id).data.map((rec) => rec[column.field]));
         }
     }
+
     public get_summaries(id: string) {
         return this.summaryCacheMap.get(id);
     }
@@ -101,14 +108,14 @@ export class IgxGridAPIService {
     }
 
     public sort(id: string, fieldName: string, dir: SortingDirection, ignoreCase: boolean): void {
-        const sortingState = this.get(id).sortingExpressions;
+        const sortingState = cloneArray(this.get(id).sortingExpressions, true);
 
         this.prepare_sorting_expression(sortingState, fieldName, dir, ignoreCase);
         this.get(id).sortingExpressions = sortingState;
     }
 
     public sort_multiple(id: string, expressions: ISortingExpression[]): void {
-        const sortingState = this.get(id).sortingExpressions;
+        const sortingState = cloneArray(this.get(id).sortingExpressions, true);
 
         for (const each of expressions) {
             this.prepare_sorting_expression(sortingState, each.fieldName, each.dir, each.ignoreCase);
@@ -158,6 +165,14 @@ export class IgxGridAPIService {
         if (index > -1) {
             filteringState.splice(index, 1);
             this.get(id).filteringExpressions = filteringState;
+        }
+        this.get(id).filteredData = null;
+    }
+
+    protected calculateSummaries(id: string, column, data) {
+        if (!this.summaryCacheMap.get(id).get(column.field)) {
+            this.summaryCacheMap.get(id).set(column.field,
+                column.summaries.operate(data));
         }
     }
 

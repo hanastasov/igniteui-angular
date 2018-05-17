@@ -5,18 +5,30 @@
 /// @author <a href="https://github.com/desig9stein" target="_blank">Marin Popov</a>
 ////
 
+/// @param {Map} $palette [$default-palette] - The palette used as basis for styling the component.
 /// @param {Color} $header-background [null] - The table header background color.
 /// @param {Color} $header-text-color [null] - The table header text color.
 /// @param {Color} $content-background [null] - The table body background color.
 /// @param {Color} $content-text-color [null] - The table body text color.
-/// @param {Color} $row-border-color [null] - The row bottom border color.
 /// @param {Color} $row-selected-background [null] - The selected row background color.
 /// @param {Color} $row-selected-text-color [null] - The selected row text color.
 /// @param {Color} $row-hover-background [null] - The hover row background color.
+/// @param {Color} $row-border-color [null] - The row bottom border color.
+/// @param {Color} $pinned-border-width [null] - The border width of the pinned border.
+/// @param {Color} $pinned-border-style [null] - The CSS border style of the pinned border.
+/// @param {Color} $pinned-border-color [null] - The color of the pinned border.
 /// @param {Color} $cell-selected-background [null] - The selected cell background color.
 /// @param {Color} $cell-selected-text-color [null] - The selected cell text color.
+/// @param {Color} $resize-line-color [null] - The table header resize line color.
+///
+/// @requires igx-color
+/// @requires igx-contrast-color
 /// @requires text-contrast
+/// @requires hexrgba
+/// @requires extend
 @function igx-grid-theme(
+    $palette: $default-palette,
+
     $header-background: null,
     $header-text-color: null,
 
@@ -33,8 +45,36 @@
     $pinned-border-color: null,
 
     $cell-selected-background: null,
-    $cell-selected-text-color: null
+    $cell-selected-text-color: null,
+    $cell-editing-background: null,
+
+    $resize-line-color: null
 ) {
+    $default-theme: (
+        name: 'igx-grid',
+
+        header-background: hexrgba(igx-color($palette, 'grays', 100)),
+        header-text-color: igx-color($palette, 'grays', 600),
+
+        content-background: #fff,
+        content-text-color: igx-color($palette, 'grays', 800),
+
+        row-selected-background: hexrgba(igx-color($palette, 'grays', 800)),
+        row-selected-text-color: igx-contrast-color($palette, 'grays', 900),
+        row-hover-background: hexrgba(igx-color($palette, 'grays', 100)),
+        row-border-color: igx-color($palette, 'grays', 300),
+
+        pinned-border-width: 2px,
+        pinned-border-style: solid,
+        pinned-border-color: igx-color($palette, 'grays', 400),
+
+        cell-selected-background: igx-color($palette, 'primary'),
+        cell-selected-text-color: igx-contrast-color($palette, 'primary'),
+        cell-editing-background: #fff,
+
+        resize-line-color: igx-color($palette, 'secondary')
+    );
+
     @if not($header-text-color) and $header-background {
         $header-text-color: text-contrast($header-background);
     }
@@ -63,7 +103,9 @@
         $pinned-border-color: rgba(text-contrast($content-background), .08)
     }
 
-    @return (
+    @return extend($default-theme, (
+        palette: $palette,
+
         header-background: $header-background,
         header-text-color: $header-text-color,
 
@@ -80,65 +122,46 @@
         pinned-border-color: $pinned-border-color,
 
         cell-selected-background: $cell-selected-background,
-        cell-selected-text-color: $cell-selected-text-color
-    );
+        cell-editing-background: $cell-editing-background,
+        cell-selected-text-color: $cell-selected-text-color,
+
+        resize-line-color: $resize-line-color
+    ));
 }
 
 /// @param {Map} $theme - The theme used to style the component.
-/// @param {Map} $palette [$default-palette] - The palette used as basis for styling the component.
-/// @requires igx-grid-theme
+/// @requires {mixin} igx-root-css-vars
+/// @requires {mixin} ellipsis
 /// @requires igx-color
 /// @requires igx-contrast-color
 /// @requires igx-elevation
 /// @requires $elevations
-/// @requires extend
 /// @requires rem
-@mixin igx-grid($theme, $palette: $default-palette) {
-    $default-theme: igx-grid-theme(
-        $header-background: hexrgba(igx-color($palette, 'grays', 100)),
-        $header-text-color: igx-color($palette, 'grays', 600),
+/// @requires var
+@mixin igx-grid($theme) {
+    @include igx-root-css-vars($theme);
 
-        $content-background: #fff,
-        $content-text-color: igx-color($palette, 'grays', 800),
+    $palette: map-get($theme, 'palette');
+    // @debug $theme;
 
-        $row-selected-background: hexrgba(igx-color($palette, 'grays', 800)),
-        $row-selected-text-color: igx-contrast-color($palette, 'grays', 900),
-        $row-hover-background: hexrgba(igx-color($palette, 'grays', 100)),
-        $row-border-color: igx-color($palette, 'grays', 300),
-
-        $pinned-border-width: 2px,
-        $pinned-border-style: solid,
-        $pinned-border-color: igx-color($palette, 'grays', 400),
-
-        $cell-selected-background: igx-color($palette, 'primary'),
-        $cell-selected-text-color: igx-contrast-color($palette, 'primary')
-    );
-
-    $this: extend($default-theme, $theme);
-
-    // @debug $this;
-
-    // General
     $grid-br: 2px;
     $grid-shadow: igx-elevation($elevations, 2);
 
     // Heading
     $grid-head-fs: rem(12px);
     $grid-head-fw: 600;
-    $grid-head-icon-size: rem(16px);
 
-    // Cell
     $grid-cell-padding: rem(16px) rem(24px);
+    $grid-cell-padding--e: 0 rem(24px);
     $grid-cell-align-num: right;
     $grid-cell-fs: rem(13px);
     $grid-cell-lh: rem(16px);
     $grid-cell-pinned-style: 1px solid;
     $grid-cell-pinned-border-color: igx-color($palette, 'grays', 300);
 
-    // Pinning
     $cell-pin: (
-        style: map-get($this, 'pinned-border-width') map-get($this, 'pinned-border-style'),
-        color: map-get($this, 'pinned-border-color')
+        style: --var($theme, 'pinned-border-width') --var($theme, 'pinned-border-style'),
+        color: --var($theme, 'pinned-border-color')
     );
 
     %grid-display {
@@ -153,26 +176,26 @@
 
     %vhelper-display {
         &::-webkit-scrollbar {
-            background: rgba(text-contrast(map-get($this, 'content-background')), .12);
+            background: rgba(text-contrast( --var($theme, 'content-background')), .12);
 
             /* stylelint-disable selector-pseudo-class-no-unknown */
             &:vertical {
-                border-left: 1px solid rgba(text-contrast(map-get($this, 'content-background')), .08);
-                border-right: 1px solid rgba(text-contrast(map-get($this, 'content-background')), .08);
+                border-left: 1px solid rgba(text-contrast( --var($theme, 'content-background')), .08);
+                border-right: 1px solid rgba(text-contrast( --var($theme, 'content-background')), .08);
             }
 
             &:horizontal {
-                border-top: 1px solid rgba(text-contrast(map-get($this, 'content-background')), .08);
-                border-bottom: 1px solid rgba(text-contrast(map-get($this, 'content-background')), .08);
+                border-top: 1px solid rgba(text-contrast( --var($theme, 'content-background')), .08);
+                border-bottom: 1px solid rgba(text-contrast( --var($theme, 'content-background')), .08);
             }
             /* stylelint-enable */
         }
 
         &::-webkit-scrollbar-thumb {
-            background: rgba(text-contrast(map-get($this, 'content-background')), .24);
+            background: rgba(text-contrast( --var($theme, 'content-background')), .24);
 
             &:hover {
-                background: rgba(text-contrast(map-get($this, 'content-background')), .37);
+                background: rgba(text-contrast( --var($theme, 'content-background')), .37);
             }
         }
     }
@@ -183,9 +206,10 @@
 
     %grid-thead,
     %grid-tfoot {
+        position: relative;
         display: block;
-        background: map-get($this, 'header-background');
-        color: map-get($this, 'header-text-color');
+        background: --var($theme, 'header-background');
+        color: --var($theme, 'header-text-color');
 
         %grid-row {
             background: inherit;
@@ -199,6 +223,7 @@
     %grid-thead {
         grid-row: 2;
         border-bottom: 1px dotted igx-color($palette, 'grays', 400);
+        z-index: 2;
     }
 
     %grid-tfoot {
@@ -215,43 +240,22 @@
         width: 100%;
         overflow: visible;
     }
-    /// @todo Sorting should not be
-    /// forced to use Material Icons
-    %grid-sorting-display {
-        font-weight: 800;
-
-        > .title::before {
-            position: relative;
-            font-family: 'Material Icons', sans-serif;
-            margin-right: 8px;
-        }
-    }
-
-    %grid-sorting-asc {
-        > .title::before {
-            content: '\E5D8';
-        }
-    }
-
-    %grid-sorting-desc {
-        > .title::before {
-            content: '\E5DB';
-        }
-    }
 
     %grid-tbody {
         position: relative;
         grid-row: 3;
-        background: map-get($this, 'content-background');
-        color: map-get($this, 'content-text-color');
+        background: --var($theme, 'content-background');
+        color: --var($theme, 'content-text-color');
         overflow: hidden;
-        will-change: transform;
+        z-index: 1;
     }
 
-    %grid-tbody--empty {
+    %grid-tbody-message {
         display: flex;
         justify-content: center;
-        text-align: center;
+        align-items: center;
+        height: 100%;
+        color: --var($theme, 'content-text-color');
     }
 
     %grid-scroll {
@@ -259,11 +263,11 @@
         flex-flow: row nowrap;
         grid-row: 5;
         width: 100%;
-        background: map-get($this, 'content-background');
+        background: --var($theme, 'header-background');
     }
 
     %grid-scroll-start {
-        border-right: map-get($cell-pin, 'style') map-get($cell-pin, 'color');
+        background: igx-color($palette, 'grays', 200);
     }
 
     %grid-scroll-main {
@@ -274,8 +278,8 @@
 
     %grid-row {
         display: flex;
-        background-color: map-get($this, 'content-background');
-        border-bottom: 1px solid map-get($this, 'row-border-color');
+        background-color: --var($theme, 'content-background');
+        border-bottom: 1px solid --var($theme, 'row-border-color');
         outline-style: none;
 
         &:last-of-type {
@@ -283,16 +287,16 @@
         }
 
         &:hover {
-            background-color: map-get($this, 'row-hover-background');
+            background-color: --var($theme, 'row-hover-background');
         }
     }
 
     %grid-row--selected {
-        color: map-get($this, 'row-selected-text-color');
-        background-color: map-get($this, 'row-selected-background');
+        color: --var($theme, 'row-selected-text-color');
+        background-color: --var($theme, 'row-selected-background');
 
         &:hover {
-            background-color: map-get($this, 'row-selected-background');
+            background-color: --var($theme, 'row-selected-background');
         }
     }
 
@@ -314,15 +318,22 @@
     }
 
     %grid-cell--selected {
-        color: map-get($this, 'cell-selected-text-color');
-        background-color: map-get($this, 'cell-selected-background') !important;
+        color: --var($theme, 'cell-selected-text-color');
+        background-color: --var($theme, 'cell-selected-background') !important;
         border-bottom: 0;
+    }
+
+    %grid-cell--editing {
+        padding: $grid-cell-padding--e;
+        background-color: --var($theme, 'cell-editing-background') !important;
+        border: 1px solid --var($theme, 'cell-selected-background');
+        box-shadow: igx-elevation($elevations, 2);
     }
 
     %grid-cell--pinned {
         position: relative;
         background-color: inherit;
-        z-index: 1;
+        z-index: 9999;
     }
 
     %grid-cell--pinned-last {
@@ -341,20 +352,91 @@
         min-width: 0;
         border-right: 1px dotted igx-color($palette, 'grays', 400);
 
-        .title {
-            @include ellipsis();
-            cursor: pointer;
-            user-select: none;
-        }
-
         &:last-of-type {
             border-right: transparent;
         }
     }
 
+    %grid-cell-header-title {
+        @include ellipsis();
+        user-select: none;
+        cursor: initial;
+        flex-grow: 1; /* hey IE, the text should take most of the space */
+    }
+
+    %grid-cell-header-icons {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        user-select: none;
+        min-width: 39px; /* sort-icon width + filtering toggle icon width */
+        height: 24px;
+
+        &:empty {
+            min-width: 0;
+        }
+
+        .sort-icon {
+            width: rem(15px);
+            height: rem(15px);
+            min-width: rem(15px); /* yeah IE, it really needs to be 15px wide... */
+            font-size: rem(15px);
+        }
+    }
+
     %grid-cell-number {
         text-align: $grid-cell-align-num;
-        justify-content: flex-end;
+
+        %grid-cell-header-icons {
+            justify-content: flex-start;
+            order: -1;
+
+            .sort-icon {
+                order: 1;
+            }
+        }
+    }
+
+    %grid__cbx-selection {
+        padding: 0 rem(24px);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1;
+        position: relative;
+        background: inherit;
+    }
+
+    %grid__resize-handle {
+        position: absolute;
+        width: 4px;
+        top: 0;
+        right: -2px;
+        height: 100%;
+        z-index: 2;
+    }
+
+    %grid__resize-line {
+        position: absolute;
+        cursor: col-resize;
+        width: 4px;
+        background-color: --var($theme, 'resize-line-color');
+        z-index: 2;
+
+        &::before,
+        &::after {
+            position: absolute;
+            content: '';
+            height: 100%;
+            width: 96px;
+        }
+
+        &::before {
+            right: 100%;
+        }
+
+        &::after {
+            left: 100%;
+        }
     }
 }
-

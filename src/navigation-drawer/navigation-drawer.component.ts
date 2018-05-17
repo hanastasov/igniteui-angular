@@ -14,13 +14,11 @@ import {
     Output,
     Renderer,
     SimpleChange,
-    TemplateRef
+    TemplateRef,
+    ViewChild
 } from "@angular/core";
-import "rxjs/add/observable/fromEvent";
-import "rxjs/add/observable/interval";
-import "rxjs/add/operator/debounce";
-import { Observable } from "rxjs/Observable";
-import { Subscription } from "rxjs/Subscription";
+import { fromEvent, interval, Observable, Subscription } from "rxjs";
+import { debounce } from "rxjs/operators";
 import { BaseComponent } from "../core/base";
 import { IgxNavigationService, IToggleView } from "../core/navigation";
 import { HammerGesturesManager } from "../core/touch";
@@ -46,12 +44,13 @@ import { IgxNavDrawerMiniTemplateDirective, IgxNavDrawerTemplateDirective } from
  * </igx-nav-drawer>
  * ```
  */
+let NEXT_ID = 0;
 @Component({
     providers: [HammerGesturesManager],
     selector: "igx-nav-drawer",
     templateUrl: "navigation-drawer.component.html"
 })
-export class IgxNavigationDrawerComponent extends BaseComponent implements
+export class IgxNavigationDrawerComponent implements
     IToggleView,
     OnInit,
     AfterContentInit,
@@ -61,7 +60,8 @@ export class IgxNavigationDrawerComponent extends BaseComponent implements
     @HostBinding("class") public cssClass = "igx-nav-drawer";
 
     /** ID of the component */
-    @Input() public id: string;
+    @HostBinding("attr.id")
+    @Input() public id = `igx-nav-drawer-${NEXT_ID++}`;
 
     /**
      * Position of the Navigation Drawer. Can be "left"(default) or "right". Only has effect when not pinned.
@@ -122,8 +122,17 @@ export class IgxNavigationDrawerComponent extends BaseComponent implements
         }
     }
 
+    private _miniTemplate: IgxNavDrawerMiniTemplateDirective;
+    public get miniTemplate(): IgxNavDrawerMiniTemplateDirective {
+        return this._miniTemplate;
+    }
     @ContentChild(IgxNavDrawerMiniTemplateDirective, { read: IgxNavDrawerMiniTemplateDirective })
-    public miniTemplate: IgxNavDrawerMiniTemplateDirective;
+    public set miniTemplate(v: IgxNavDrawerMiniTemplateDirective) {
+        if (!this.isOpen) {
+            this.setDrawerWidth(v ? this.miniWidth : "");
+        }
+        this._miniTemplate = v;
+    }
 
     @ContentChild(IgxNavDrawerTemplateDirective, { read: IgxNavDrawerTemplateDirective })
     protected contentTemplate: IgxNavDrawerTemplateDirective;
@@ -153,27 +162,20 @@ export class IgxNavigationDrawerComponent extends BaseComponent implements
         styleDummy: "igx-nav-drawer__style-dummy"
     };
 
-    private _drawer: any;
-    get drawer(): HTMLElement {
-        if (!this._drawer) {
-            this._drawer = this.getChild("." + this.css.drawer);
-        }
-        return this._drawer;
-    }
-    private _overlay: any;
-    get overlay() {
-        if (!this._overlay) {
-            this._overlay = this.getChild("." + this.css.overlay);
-        }
-        return this._overlay;
+    @ViewChild("aside") private _drawer: ElementRef;
+    @ViewChild("overlay") private _overlay: ElementRef;
+    @ViewChild("dummy") private _styleDummy: ElementRef;
+
+    get drawer() {
+        return this._drawer.nativeElement;
     }
 
-    private _styleDummy: any;
+    get overlay() {
+        return this._overlay.nativeElement;
+    }
+
     get styleDummy() {
-        if (!this._styleDummy) {
-            this._styleDummy = this.getChild("." + this.css.styleDummy);
-        }
-        return this._styleDummy;
+        return this._styleDummy.nativeElement;
     }
 
     /** Pan animation properties */
@@ -230,7 +232,6 @@ export class IgxNavigationDrawerComponent extends BaseComponent implements
         // private animate: AnimationBuilder, TODO
         protected renderer: Renderer,
         private _touchManager: HammerGesturesManager) {
-        super(renderer);
     }
 
     public ngOnInit() {
@@ -456,7 +457,7 @@ export class IgxNavigationDrawerComponent extends BaseComponent implements
             this._touchManager.addGlobalEventListener("document", "panend", this.panEnd);
         }
         if (this.pinThreshold && !this._resizeObserver) {
-            this._resizeObserver = Observable.fromEvent(window, "resize").debounce(() => Observable.interval(150))
+            this._resizeObserver = fromEvent(window, "resize").pipe(debounce(() => interval(150)))
                 .subscribe((value) => { this.checkPinThreshold(); });
         }
     }

@@ -23,8 +23,8 @@
         @extend %grid-tbody !optional;
     }
 
-    @include e(tbody, $m: empty) {
-        @extend %grid-tbody--empty !optional;
+    @include e(tbody-message) {
+        @extend %grid-tbody-message !optional;
     }
 
     @include e(scroll) {
@@ -58,17 +58,6 @@
     @include e(th) {
         @extend %grid-cell-display !optional;
         @extend %grid-cell-header !optional;
-        $block: bem--selector-to-string(&);
-
-        &.asc {
-            @extend %grid-sorting-display !optional;
-            @extend %grid-sorting-asc !optional;
-        }
-
-        &.desc {
-            @extend %grid-sorting-display !optional;
-            @extend %grid-sorting-desc !optional;
-        }
     }
 
     @include e(th, $m: number) {
@@ -87,12 +76,32 @@
         @extend %grid-cell--fixed-width !optional;
     }
 
+    @include e(th-title) {
+        @extend %grid-cell-header-title !optional;
+    }
+
+    @include e(th-icons) {
+        @extend %grid-cell-header-icons !optional;
+    }
+
+    @include e(th-resize-handle) {
+        @extend %grid__resize-handle !optional;
+    }
+
+    @include e(th-resize-line) {
+        @extend %grid__resize-line !optional;
+    }
+
     @include e(td) {
         @extend %grid-cell-display !optional;
     }
 
     @include e(td, $m: selected) {
         @extend %grid-cell--selected !optional;
+    }
+
+    @include e(td, $m: editing) {
+        @extend %grid-cell--editing !optional;
     }
 
     @include e(td, $m: number) {
@@ -114,5 +123,9 @@
 
     @include e(td, $m: fw) {
         @extend %grid-cell--fixed-width !optional;
+    }
+
+    @include e(cbx-selection) {
+        @extend %grid__cbx-selection !optional;
     }
 }

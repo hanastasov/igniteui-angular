@@ -11,8 +11,11 @@ import {
 } from "@angular/core";
 import { DataType } from "../data-operations/data-util";
 import { STRING_FILTERS } from "../data-operations/filtering-condition";
+import { IgxTextHighlightDirective } from "../directives/text-highlight/text-highlight.directive";
 import { IgxGridAPIService } from "./api.service";
+import { IgxGridCellComponent } from "./cell.component";
 import { IgxDateSummaryOperand, IgxNumberSummaryOperand, IgxSummaryOperand, IgxSummaryResult } from "./grid-summary";
+import { IgxGridSummaryComponent } from "./grid-summary.component";
 import {
     IgxCellEditorTemplateDirective,
     IgxCellFooterTemplateDirective,
@@ -52,6 +55,9 @@ export class IgxColumnComponent implements AfterContentInit {
     public filterable = false;
 
     @Input()
+    public resizable = false;
+
+    @Input()
     public hasSummary = false;
 
     @Input()
@@ -63,6 +69,20 @@ export class IgxColumnComponent implements AfterContentInit {
         if (this._hidden !== value) {
             this._hidden = value;
             this.check();
+
+            if (this.grid) {
+                const activeInfo = IgxTextHighlightDirective.highlightGroupsMap.get(this.grid.id);
+                const oldIndex = activeInfo.columnIndex;
+
+                if (this.grid.lastSearchInfo.searchText) {
+                    if (this.index <= oldIndex) {
+                        const newIndex = this.hidden ? oldIndex - 1 : oldIndex + 1;
+                        this.updateHighlights(oldIndex, newIndex);
+                    } else if (oldIndex === -1 && !this.hidden) {
+                        this.grid.refreshSearch();
+                    }
+                }
+            }
         }
     }
 
@@ -71,6 +91,12 @@ export class IgxColumnComponent implements AfterContentInit {
 
     @Input()
     public width: string;
+
+    @Input()
+    public maxWidth: string;
+
+    @Input()
+    public minWidth = this.defaultMinWidth;
 
     @Input()
     public headerClasses = "";
@@ -94,8 +120,7 @@ export class IgxColumnComponent implements AfterContentInit {
     public formatter: (value: any) => any;
 
     @Input()
-    public filteringCondition: (target: any, searchVal: any, ignoreCase?: boolean) =>
-        boolean = STRING_FILTERS.contains;
+    public filteringCondition: (target: any, searchVal: any, ignoreCase?: boolean) => any;
 
     @Input()
     public filteringIgnoreCase = true;
@@ -118,6 +143,10 @@ export class IgxColumnComponent implements AfterContentInit {
 
     public set summaries(classRef: any) {
         this._summaries = new classRef();
+    }
+
+    get defaultMinWidth(): string {
+        return this._defaultMinWidth;
     }
 
     get grid(): IgxGridComponent {
@@ -160,6 +189,11 @@ export class IgxColumnComponent implements AfterContentInit {
         this.grid.markForCheck();
     }
 
+    get cells(): IgxGridCellComponent[] {
+        return this.grid.rowList.map((row) => row.cells.filter((cell) => cell.columnIndex === this.index))
+        .reduce((a, b) => a.concat(b), []);
+    }
+
     get visibleIndex(): number {
         const grid = this.gridAPI.get(this.gridID);
         let vIndex = -1;
@@ -179,6 +213,8 @@ export class IgxColumnComponent implements AfterContentInit {
     protected _summaries = null;
     protected _hidden = false;
     protected _index: number;
+
+    private _defaultMinWidth = "88";
 
     @ContentChild(IgxCellTemplateDirective, { read: IgxCellTemplateDirective })
     protected cellTemplate: IgxCellTemplateDirective;
@@ -223,12 +259,28 @@ export class IgxColumnComponent implements AfterContentInit {
         }
     }
 
-    public pin() {
-        this.gridAPI.get(this.gridID).pinColumn(this.field);
+    public pin(): boolean {
+        return this.gridAPI.get(this.gridID).pinColumn(this.field);
     }
-    public unpin() {
-        this.gridAPI.get(this.gridID).unpinColumn(this.field);
+
+    public unpin(): boolean {
+        return this.gridAPI.get(this.gridID).unpinColumn(this.field);
     }
+
+    public updateHighlights(oldIndex: number, newIndex: number) {
+        const activeInfo = IgxTextHighlightDirective.highlightGroupsMap.get(this.grid.id);
+
+        if (activeInfo.columnIndex === oldIndex) {
+            IgxTextHighlightDirective.setActiveHighlight(this.grid.id,
+                newIndex,
+                activeInfo.rowIndex,
+                activeInfo.index,
+                activeInfo.page);
+
+            this.grid.refreshSearch(true);
+        }
+    }
+
     protected check() {
         if (this.grid) {
             this.grid.markForCheck();

@@ -1,5 +1,6 @@
 import {
     animate,
+    AnimationEvent,
     state,
     style,
     transition,
@@ -8,9 +9,9 @@ import {
 } from "@angular/animations";
 import { CommonModule } from "@angular/common";
 import {
-    AnimationTransitionEvent,
     Component,
     EventEmitter,
+    HostBinding,
     Input,
     NgModule,
     NgZone,
@@ -33,6 +34,7 @@ import { fadeIn, fadeOut, slideInBottom, slideOutBottom } from "../animations/ma
  * </div>
  * ```
  */
+let NEXT_ID = 0;
 @Component({
     animations: [
         trigger("slideInOut", [
@@ -81,6 +83,11 @@ import { fadeIn, fadeOut, slideInBottom, slideOutBottom } from "../animations/ma
     templateUrl: "snackbar.component.html"
 })
 export class IgxSnackbarComponent {
+
+    /** ID of the component */
+    @HostBinding("attr.id")
+    @Input()
+    public id = `igx-snackbar-${NEXT_ID++}`;
     /**
      * The message that will be shown message by the IgxSnackbar component
      * @type {string}
@@ -123,15 +130,15 @@ export class IgxSnackbarComponent {
 
     /**
      * The event that will be thrown when the snackbar animation starts
-     * @type {EventEmitter<AnimationTransitionEvent>}
+     * @type {EventEmitter<AnimationEvent>}
      */
-    @Output() public animationStarted = new EventEmitter<AnimationTransitionEvent>();
+    @Output() public animationStarted = new EventEmitter<AnimationEvent>();
 
     /**
      * The event that will be thrown when the snackbar animation ends
-     * @type {EventEmitter<AnimationTransitionEvent>}
+     * @type {EventEmitter<AnimationEvent>}
      */
-    @Output() public animationDone = new EventEmitter<AnimationTransitionEvent>();
+    @Output() public animationDone = new EventEmitter<AnimationEvent>();
 
     private timeoutId;
 
@@ -165,13 +172,13 @@ export class IgxSnackbarComponent {
         this.onAction.emit(this);
     }
 
-    public snackbarAnimationStarted(evt: AnimationTransitionEvent): void {
+    public snackbarAnimationStarted(evt: AnimationEvent): void {
         if (evt.fromState === "void") {
             this.animationStarted.emit(evt);
         }
     }
 
-    public snackbarAnimationDone(evt: AnimationTransitionEvent): void {
+    public snackbarAnimationDone(evt: AnimationEvent): void {
         if (evt.fromState === "show") {
             this.animationDone.emit(evt);
         }

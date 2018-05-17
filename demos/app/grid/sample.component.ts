@@ -1,6 +1,7 @@
 import { Component, Injectable, ViewChild } from "@angular/core";
 import { Http } from "@angular/http";
-import { BehaviorSubject, Observable } from "rxjs/Rx";
+import { BehaviorSubject, Observable } from "rxjs";
+import { map  } from "rxjs/operators";
 import { IgxColumnComponent } from "../../lib/grid/column.component";
 import { IgxGridComponent } from "../../lib/grid/grid.component";
 import {
@@ -9,23 +10,22 @@ import {
     IgxSnackbarComponent,
     IgxToastComponent,
     IPagingState,
+    NUMBER_FILTERS,
     PagingError,
     SortingDirection,
     StableSortingStrategy,
-    NUMBER_FILTERS,
     STRING_FILTERS
 } from "../../lib/main";
 
 import {
-    IgxExcelExporterService,
-    IgxExcelExporterOptions,
-    IgxCsvExporterService,
-    IgxCsvExporterOptions,
     CsvFileTypes,
     IgxBaseExporter,
+    IgxCsvExporterOptions,
+    IgxCsvExporterService,
+    IgxExcelExporterOptions,
+    IgxExporterOptionsBase,
+    IgxExcelExporterService
 } from "../../lib/services/index";
-
-import { IgxExporterOptionsBase } from "../../lib/services/exporter-common/exporter-options-base";
 
 @Injectable()
 export class LocalService {
@@ -41,8 +41,8 @@ export class LocalService {
     }
 
     public getData() {
-        return this.http.get(this.url)
-            .map((response) => response.json())
+        return this.http.get(this.url).pipe(
+            map((response) => response.json()))
             .subscribe((data) => {
                 this.dataStore = data.value;
                 this._records.next(this.dataStore);
@@ -63,26 +63,14 @@ export class RemoteService {
     }
 
     public getData(data?: Array<any>, cb?: () => void): any {
-        return this.http
-            .get(this.buildUrl(null))
-            .map((response) => response.json())
-            .map((response) => {
-                if (data) {
-                    // const p: IPagingState = data.paging;
-                    //  if (p) {
-                    //      const countRecs: number = response["@odata.count"];
-                    //      p.metadata = {
-                    //          countPages: Math.ceil(countRecs / p.recordsPerPage),
-                    //         countRecords: countRecs,
-                    //         error: PagingError.None
-                    //      };
-                    //  }
-                }
+        return this.http.get(this.buildUrl(null)).pipe(
+            map((response) => response.json()),
+            map((response) => {
                 if (cb) {
                     cb();
                 }
                 return response;
-            })
+            }))
             .subscribe((data) => {
                 this._remoteData.next(data.value);
             });
@@ -131,9 +119,9 @@ export class GridSampleComponent {
     public editCell;
     public exportFormat = "XLSX";
     constructor(private localService: LocalService,
-    private remoteService: RemoteService,
-    private excelExporterService: IgxExcelExporterService,
-    private csvExporterService: IgxCsvExporterService) { }
+                private remoteService: RemoteService,
+                private excelExporterService: IgxExcelExporterService,
+                private csvExporterService: IgxCsvExporterService) { }
     public ngOnInit(): void {
         this.data = this.localService.records;
         this.remote = this.remoteService.remoteData;
@@ -327,7 +315,24 @@ export class GridSampleComponent {
             case "TSV":
                 return new IgxCsvExporterOptions(fileName, CsvFileTypes.TSV);
             case "TAB":
-                return new IgxCsvExporterOptions(fileName, CsvFileTypes.TAB)
+                return new IgxCsvExporterOptions(fileName, CsvFileTypes.TAB);
         }
+    }
+
+    public onSearchChange(text: string) {
+        this.grid3.findNext(text);
+    }
+
+    public onSearch(ev) {
+        if (ev.key === "Enter" || ev.key === "ArrowDown"|| ev.key === "ArrowRight") {
+            this.grid3.findNext(ev.target.value);
+        }
+        else if (ev.key === "ArrowUp" || ev.key === "ArrowLeft") {
+            this.grid3.findPrev(ev.target.value);
+        }
+    }
+
+    public onColumnInit(column: IgxColumnComponent) {
+        column.editable = true;
     }
 }

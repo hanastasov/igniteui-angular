@@ -8,10 +8,34 @@ import { IDialogEventArgs, IgxDialogComponent, IgxDialogModule } from "./dialog.
 describe("Dialog", () => {
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [AlertComponent, DialogComponent, CustomDialogComponent, NestedDialogsComponent],
+            declarations: [
+                AlertComponent,
+                DialogComponent,
+                CustomDialogComponent,
+                NestedDialogsComponent,
+                CustomTemplates1DialogComponent,
+                CustomTemplates2DialogComponent
+            ],
             imports: [BrowserAnimationsModule, IgxDialogModule]
         }).compileComponents();
     }));
+    it("Initialize a datepicker component with id", () => {
+        const fixture = TestBed.createComponent(AlertComponent);
+        fixture.detectChanges();
+
+        const dialog = fixture.componentInstance.dialog;
+        const domDialog = fixture.debugElement.query(By.css("igx-dialog")).nativeElement;
+
+        expect(dialog.id).toContain("igx-dialog-");
+        expect(domDialog.id).toContain("igx-dialog-");
+
+        dialog.id = "customDialog";
+        fixture.detectChanges();
+
+        expect(dialog.id).toBe("customDialog");
+        expect(domDialog.id).toBe("customDialog");
+    });
+
     it("Should set dialog title.", () => {
         const fixture = TestBed.createComponent(AlertComponent);
         const dialog = fixture.componentInstance.dialog;
@@ -78,34 +102,40 @@ describe("Dialog", () => {
         const dialog = fixture.componentInstance.dialog;
 
         fixture.detectChanges();
-        testDialogIsOpen(fixture.debugElement, dialog, false);
+        expect(dialog.isOpen).toEqual(false);
 
         dialog.open();
         fixture.detectChanges();
-        testDialogIsOpen(fixture.debugElement, dialog, true);
+        expect(dialog.isOpen).toEqual(true);
 
         dialog.close();
         fixture.detectChanges();
-        testDialogIsOpen(fixture.debugElement, dialog, false);
+        expect(dialog.isOpen).toEqual(false);
     });
 
     it("Should set closeOnOutsideSelect.", () => {
         const fixture = TestBed.createComponent(AlertComponent);
-        const dialog = fixture.componentInstance.dialog;
+        fixture.detectChanges();
 
+        const dialog = fixture.componentInstance.dialog;
         dialog.open();
         fixture.detectChanges();
 
-        fixture.componentInstance.dialog.dialogEl.nativeElement.click();
-        testDialogIsOpen(fixture.debugElement, dialog, false);
+        const dialogElem = fixture.debugElement.query(By.css(".igx-dialog")).nativeElement;
+        dialogElem.click();
+        fixture.detectChanges();
+
+        expect(dialog.isOpen).toEqual(false);
 
         dialog.closeOnOutsideSelect = false;
         dialog.open();
-        fixture.componentInstance.dialog.dialogEl.nativeElement.click();
+        fixture.detectChanges();
+
+        dialogElem.click();
 
         fixture.detectChanges();
 
-        testDialogIsOpen(fixture.debugElement, dialog, true);
+        expect(dialog.isOpen).toEqual(true);
     });
 
     it("Should test events.", () => {
@@ -164,6 +194,8 @@ describe("Dialog", () => {
 
     it("Should close only inner dialog on closeOnOutsideSelect.", () => {
         const fixture = TestBed.createComponent(NestedDialogsComponent);
+        fixture.detectChanges();
+
         const mainDialog = fixture.componentInstance.main;
         const childDialog = fixture.componentInstance.child;
 
@@ -171,24 +203,47 @@ describe("Dialog", () => {
         childDialog.open();
         fixture.detectChanges();
 
-        fixture.componentInstance.child.dialogEl.nativeElement.click();
+        const dialogs = fixture.debugElement.queryAll(By.css(".igx-dialog"));
+        const maindDialogElem = dialogs[0].nativeElement;
+        const childDialogElem = dialogs[1].nativeElement;
+
+        childDialogElem.click();
         fixture.detectChanges();
 
-        testDialogIsOpen(fixture.debugElement, mainDialog, true);
-        testDialogIsOpen(fixture.debugElement, childDialog, false);
+        expect(mainDialog.isOpen).toEqual(true);
+        expect(childDialog.isOpen).toEqual(false);
 
-        fixture.componentInstance.main.dialogEl.nativeElement.click();
+        maindDialogElem.click();
         fixture.detectChanges();
 
-        testDialogIsOpen(fixture.debugElement, mainDialog, false);
-        testDialogIsOpen(fixture.debugElement, childDialog, false);
+        expect(mainDialog.isOpen).toEqual(false);
+        expect(childDialog.isOpen).toEqual(false);
     });
 
-    function testDialogIsOpen(debugElement: DebugElement, dialog: IgxDialogComponent, isOpen: boolean) {
-        const dialogDebugElement = debugElement.query(By.css(".igx-dialog"));
+    it("Should initialize igx-dialog custom title and actions", () => {
+        const data = [{
+                component: CustomTemplates1DialogComponent
+            }, {
+                component: CustomTemplates2DialogComponent
+            }];
 
-        expect(dialog.isOpen).toEqual(isOpen);
-    }
+        data.forEach((item) => {
+            const fixture = TestBed.createComponent(item.component);
+            const dialog = fixture.componentInstance.dialog;
+
+            dialog.open();
+            fixture.detectChanges();
+
+            const dialogWindow = fixture.debugElement.query(By.css(".igx-dialog__window"));
+            expect(dialogWindow.children.length).toEqual(2);
+
+            expect(dialogWindow.children[0].nativeElement.innerText.toString()).toContain("TITLE");
+            expect(dialogWindow.children[1].nativeElement.innerText.toString()).toContain("BUTTONS");
+
+            dialog.close();
+        });
+
+    });
 
     function dispatchEvent(element: HTMLElement, eventType: string) {
         const event = new Event(eventType);
@@ -258,4 +313,26 @@ class CustomDialogComponent {
 class NestedDialogsComponent {
     @ViewChild("child") public child: IgxDialogComponent;
     @ViewChild("main") public main: IgxDialogComponent;
+}
+
+@Component({
+    template: `<igx-dialog #dialog>
+                <igx-dialog-title>
+                    <div>TITLE 1</div>
+                </igx-dialog-title>
+                <igx-dialog-actions>
+                    <div>BUTTONS 1</div>
+                </igx-dialog-actions>
+            </igx-dialog>` })
+class CustomTemplates1DialogComponent {
+    @ViewChild("dialog") public dialog: IgxDialogComponent;
+}
+
+@Component({
+    template: `<igx-dialog #dialog>
+                    <div igxDialogTitle>TITLE 2</div>
+                    <div igxDialogActions>BUTTONS 2</div>
+            </igx-dialog>` })
+class CustomTemplates2DialogComponent {
+    @ViewChild("dialog") public dialog: IgxDialogComponent;
 }
