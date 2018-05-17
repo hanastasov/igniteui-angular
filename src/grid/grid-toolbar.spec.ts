@@ -1,11 +1,10 @@
-
+import { AnimationBuilder } from "@angular/animations";
 import { Component, DebugElement, ViewChild } from "@angular/core";
 import { async, fakeAsync, TestBed, tick } from "@angular/core/testing";
 import { By } from "@angular/platform-browser";
 import { IgxGridToolbarComponent } from "./grid-toolbar.component";
 import { IgxGridComponent } from "./grid.component";
 import { IgxGridModule } from "./index";
-import { AnimationBuilder } from "@angular/animations";
 
 describe("IgxGrid - Grid Toolbar", () => {
 
@@ -14,11 +13,8 @@ describe("IgxGrid - Grid Toolbar", () => {
             declarations: [
                 GridToolbarTestPage1Component,
                 GridToolbarTestPage2Component
-                //IgxGridCaptionComponent,
-                //IgxGridComponent
             ],
             imports: [
-                //IgxGridCaptionComponent,
                 IgxGridModule.forRoot()
             ],
             providers: [
@@ -33,13 +29,13 @@ describe("IgxGrid - Grid Toolbar", () => {
         fixture.detectChanges();
         const testPage = fixture.componentInstance;
 
-        let initialTitleValue = "Grid Toobar Title";
-        let newTitleValue: string = "Some other title";
+        const initialTitleValue = "Grid Toobar Title";
+        const newTitleValue = "Some other title";
 
         const grid = fixture.debugElement.query(By.css("igx-grid"));
         const gridToolbar = grid.query(By.css("igx-grid-toolbar"));
         const gridToolbarTitle = gridToolbar.query(By.css(".igx-grid-toolbar__title"));
-        
+
         expect(testPage.grid1.toolbarTitle).toBe(initialTitleValue);
         expect(gridToolbarTitle.nativeElement.innerText).toBe(initialTitleValue);
 
@@ -59,25 +55,22 @@ describe("IgxGrid - Grid Toolbar", () => {
         const grid = fixture.debugElement.query(By.css("igx-grid"));
         const gridToolbar = grid.query(By.css("igx-grid-toolbar"));
 
-        //let exportButton = gridToolbar.query(By.css(".igx-grid-toolbar__dropdown"));
-        //expect(exportButton).not.toBe(null);
+        let exportButton = gridToolbar.query(By.css(".igx-grid-toolbar__dropdown"));
+        console.log(exportButton);
 
-        //testPage.grid1.toolbarExportExcel = false;
+        expect(exportButton).not.toBe(null);
 
-        //exportButton = gridToolbar.query(By.css(".igx-grid-toolbar__dropdown"));
-        //expect(exportButton).toBe(null);
+        testPage.grid1.toolbarExportExcel = false;
+        testPage.grid1.cdr.detectChanges();
+        fixture.detectChanges();
 
-        //console.log(grid);
-        //console.log(gridToolbar);
-        //console.log(gridDropDownPanel);
+        exportButton = gridToolbar.query(By.css(".igx-grid-toolbar__dropdown"));
+        console.log(exportButton);
 
-        //console.log(gridToolbarTitle.nativeElement.innerText);
-
+        expect(exportButton).toBe(null);
     });
 
 });
-
-
 
 @Component({
     template: `
@@ -108,7 +101,6 @@ export class GridToolbarTestPage1Component {
 
 }
 
-
 @Component({
     template: `
         <igx-grid #grid1 [data]="data" [autoGenerate]="true" width="400" height="200"
@@ -119,7 +111,6 @@ export class GridToolbarTestPage1Component {
         </igx-grid>
     `
 })
-//
 export class GridToolbarTestPage2Component {
 
     public data = [

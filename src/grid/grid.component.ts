@@ -37,15 +37,15 @@ import { ISortingExpression, SortingDirection } from "../data-operations/sorting
 import { IgxForOfDirective } from "../directives/for-of/for_of.directive";
 import { IForOfState } from "../directives/for-of/IForOfState";
 import { IActiveHighlightInfo, IgxTextHighlightDirective } from "../directives/text-highlight/text-highlight.directive";
+import { IgxBaseExporter } from "../services/index";
 import { IgxCheckboxComponent } from "./../checkbox/checkbox.component";
 import { IgxGridAPIService } from "./api.service";
 import { IgxGridCellComponent } from "./cell.component";
 import { IgxColumnComponent } from "./column.component";
 import { ISummaryExpression } from "./grid-summary";
+import { IgxGridToolbarComponent } from "./grid-toolbar.component";
 import { IgxGridSortingPipe } from "./grid.pipes";
 import { IgxGridRowComponent } from "./row.component";
-import { IgxGridToolbarComponent } from "./grid-toolbar.component";
-import { IgxBaseExporter } from "../services/index";
 
 let NEXT_ID = 0;
 const DEBOUNCE_TIME = 16;
@@ -434,25 +434,25 @@ export class IgxGridComponent implements OnInit, OnDestroy, AfterContentInit, Af
     public toolbar: IgxGridToolbarComponent = null;
 
     @Input()
-    public showToolbar: false;
+    public showToolbar = false;
 
     @Input()
-    public toolbarTitle: null;
+    public toolbarTitle: string = null;
 
     @Input()
-    public toolbarExportExcel: false;
+    public toolbarExportExcel = false;
 
     @Input()
-    public toolbarExportCsv: false;
+    public toolbarExportCsv = false;
 
     @Input()
-    public exportText: null;
+    public exportText: string = null;
 
     @Input()
-    public exportExcelText: null;
+    public exportExcelText: string = null;
 
     @Input()
-    public exportCsvText: null;
+    public exportCsvText: string = null;
 
     @Output()
     public onToolbarExporting = new EventEmitter<IGridToolbarExportEventArgs>();
