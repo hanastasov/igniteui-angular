@@ -7,13 +7,14 @@
     <div *ngIf="shouldShowColumnHiding">
         <!-- <button name="btnColumnChooser" *ngIf=" columnHidingUI && columnHidingUI.togglе"
             igxButton igxRipple [igxToggleAction]=" columnHidingUI.toggle"> -->
-        <button name="btnColumnChooser" 
+        <button igxButton="flat" name="btnColumnChooser"
                     igxButton igxRipple >
-            <span>
+            <div  class="igx-grid-toolbar__button-space">
                 <igx-icon *ngIf="hiddenColumnsCount > 0">visibility_off</igx-icon>
                 <igx-icon *ngIf="hiddenColumnsCount === 0">visibility</igx-icon>
-                {{ hiddenColumnsCount }} {{ getColumnHiddingText() }}
-            </span>
+                <span>{{ hiddenColumnsCount }}</span>
+                <span>{{ getColumnHiddingText() }}</span>
+            </div>
         </button>
         <!-- <igx-column-hiding #columnHidingUI [columns]="columnList" [title]="columnHidingTitle"
             (onColumnVisibilityChanged)="toggleColumnVisibility($event)" columnDisplayOrder="Alphabetical">
@@ -25,7 +26,7 @@
                 (click)="exportClicked()">
             <div class="igx-grid-toolbar__button-space">
                 <igx-icon fontSet="material" name="import_export"></igx-icon>
-                <span class="igx-grid-toolbar__button-space">{{ getExportText() }}</span>
+                <span>{{ getExportText() }}</span>
                 <igx-icon fontSet="material" name="arrow_drop_down"></igx-icon>
             </div>
         </button>

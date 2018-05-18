@@ -147,6 +147,24 @@
                 color: --var($theme, 'button-focus-text-color');
             }
         }
+
+        %igx-button--icon {
+            background: --var($theme, 'button-background');
+            color: --var($theme, 'button-text-color');
+            margin-left: rem(8);
+            border-radius: 0;
+
+            &:hover {
+                background: --var($theme, 'button-hover-background');
+                color: --var($theme, 'button-hover-text-color');
+            }
+
+            &:focus,
+            &:active {
+                background: --var($theme, 'button-focus-background');
+                color: --var($theme, 'button-focus-text-color');
+            }
+        }
     }
 
     %grid-caption {
@@ -174,6 +192,7 @@
             padding: rem(0);
             right: 0;
             margin: 0;
+            min-width: auto;
         }
     }
 
@@ -185,6 +204,7 @@
         position: relative;
         padding: em(8px) em(16px);
         color: --var($theme, 'item-text-color');
+        white-space: nowrap;
 
         &:hover {
             background: --var($theme, 'item-hover-background');
@@ -212,18 +232,22 @@
     }
 
     [dir='rtl'] {
-        %igx-grid-toolbar {
+        %igx-grid-toolbar
+        {
             flex-direction: row-reverse;
             text-align: right;
 
-            %igx-button--flat {
+            %igx-button--flat,
+            %igx-button--icon {
                 margin-right: rem(8);
                 margin-left: 0;
             }
         }
 
-        %igx-grid-toolbar__button-space {
+        %igx-grid-toolbar__button-space
+        {
             flex-direction: row-reverse;
+            text-align: right;
 
             > *{
                 margin-right: rem(0);
@@ -235,3 +259,6 @@
         }
     }
 }
+
+
+
