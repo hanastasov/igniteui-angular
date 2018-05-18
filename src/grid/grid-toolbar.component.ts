@@ -111,7 +111,7 @@ export class IgxGridToolbarComponent implements IGridBus {
             return;
         }
         this._exportEventSubscription = this.excelExporter.onExportEnded.subscribe((ev) => this._exportEndedHandler());
-        // start busy indicator here
+        // show busy indicator here
         this.excelExporter.export(igxGrid, new IgxExcelExporterOptions("ExportedData"));
     }
 
@@ -124,7 +124,7 @@ export class IgxGridToolbarComponent implements IGridBus {
             return;
         }
         this._exportEventSubscription = this.csvExporter.onExportEnded.subscribe((ev) => this._exportEndedHandler());
-        // start busy indicator here
+        // show busy indicator here
         this.csvExporter.export(igxGrid, new IgxCsvExporterOptions("ExportedData", CsvFileTypes.CSV));
     }
 
@@ -132,6 +132,7 @@ export class IgxGridToolbarComponent implements IGridBus {
         if (this._exportEventSubscription) {
             this._exportEventSubscription.unsubscribe();
         }
+        // hide busy indicator here
     }
 
 }
