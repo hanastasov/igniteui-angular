@@ -35,11 +35,8 @@ export class IgxGridToolbarComponent implements IGridBus {
     @ViewChild(IgxToggleDirective, { read: IgxToggleDirective })
     protected toggleDirective: IgxToggleDirective;
 
-    public get showColumnChooserButton(): boolean {
-        return true;
-    }
-
-    public get showAdvFilteringButton(): boolean {
+    public get shouldShowColumnHiding(): boolean {
+        // should check the grid's "columnHiding" property
         return true;
     }
 
@@ -59,7 +56,7 @@ export class IgxGridToolbarComponent implements IGridBus {
     }
 
     public get hiddenColumnsCount(): number {
-        return 0;
+        return 1;
     }
 
     private _exportEventSubscription;
@@ -75,6 +72,12 @@ export class IgxGridToolbarComponent implements IGridBus {
         return igxGrid != null ? igxGrid.toolbarTitle : "";
     }
 
+    public getColumnHiddingText(): string {
+        const igxGrid = this.gridAPI.get(this.gridID);
+        // return igxGrid != null ? igxGrid.columnHiddingText : "";
+        return "hidden";
+    }
+
     public getExportText(): string {
         const igxGrid = this.gridAPI.get(this.gridID);
         return igxGrid != null ? igxGrid.exportText : "";
@@ -88,14 +91,6 @@ export class IgxGridToolbarComponent implements IGridBus {
     public getExportCsvText(): string {
         const igxGrid = this.gridAPI.get(this.gridID);
         return igxGrid != null ? igxGrid.exportCsvText : "";
-    }
-
-    public columnChooserClicked() {
-        console.log("@@@ igxGridToolbar.columnChooserClicked");
-    }
-
-    public advFilteringClicked() {
-        console.log("@@@ igxGridToolbar.advFilteringClicked");
     }
 
     public exportClicked() {

@@ -3,16 +3,22 @@
 </span>
 
 <div class="igx-grid-toolbar__actions">
-    <button igxButton="flat" igxRipple #btnColumnChooser
-            *ngIf="showColumnChooserButton"
-            (click)="columnChooserClicked()">
-        <div class="igx-grid-toolbar__button-space">
-            <igx-icon fontSet="material" name="remove_red_eye"></igx-icon>
-            <span>{{ hiddenColumnsCount }}</span>
-            <span>hidden</span>
-        </div>
 
-    </button>
+    <div *ngIf="shouldShowColumnHiding">
+        <!-- <button name="btnColumnChooser" *ngIf=" columnHidingUI && columnHidingUI.togglе"
+            igxButton igxRipple [igxToggleAction]=" columnHidingUI.toggle"> -->
+        <button name="btnColumnChooser" 
+                    igxButton igxRipple >
+            <span>
+                <igx-icon *ngIf="hiddenColumnsCount > 0">visibility_off</igx-icon>
+                <igx-icon *ngIf="hiddenColumnsCount === 0">visibility</igx-icon>
+                {{ hiddenColumnsCount }} {{ getColumnHiddingText() }}
+            </span>
+        </button>
+        <!-- <igx-column-hiding #columnHidingUI [columns]="columnList" [title]="columnHidingTitle"
+            (onColumnVisibilityChanged)="toggleColumnVisibility($event)" columnDisplayOrder="Alphabetical">
+        </igx-column-hiding> -->
+    </div>
 
     <div class="igx-grid-toolbar__dropdown" *ngIf="shouldShowExportButton" id="btnExport">
         <button igxButton="flat" igxRipple #btnExport

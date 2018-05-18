@@ -42,7 +42,7 @@ describe("IgxGrid - Grid Toolbar", () => {
         testPage.grid1.showToolbar = false;
         testPage.grid1.cdr.detectChanges();
         fixture.detectChanges();
-        
+
         gridToolbar = grid.query(By.css("igx-grid-toolbar"));
         expect(gridToolbar).toBe(null);
     });
@@ -137,7 +137,7 @@ describe("IgxGrid - Grid Toolbar", () => {
 
         let exportButton = gridToolbar.query(By.css("li#btnExportExcel"));
         expect(exportButton).toBe(null);
-        
+
         testPage.grid1.toolbarExportExcel = true;
         testPage.grid1.cdr.detectChanges();
         fixture.detectChanges();
@@ -167,7 +167,7 @@ describe("IgxGrid - Grid Toolbar", () => {
 
         let exportButton = gridToolbar.query(By.css("li#btnExportCsv"));
         expect(exportButton).toBe(null);
-        
+
         testPage.grid1.toolbarExportCsv = true;
         testPage.grid1.cdr.detectChanges();
         fixture.detectChanges();
