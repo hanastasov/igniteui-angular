@@ -191,16 +191,15 @@
 
             %igx-grid-toolbar__button-space
             {
-                flex-direction: row-reverse;
                 text-align: right;
-            }
 
-            > *{
-                margin-left: 0;
-                margin-right: rem(8px);
+                > *{
+                    margin-left: 0;
+                    margin-right: rem(8px);
 
-                &:last-child {
-                    margin-right: 0;
+                    &:last-child {
+                        margin-left: 0;
+                    }
                 }
             }
         }
@@ -218,16 +217,15 @@
 
             %igx-grid-toolbar__button-space
             {
-                flex-direction: row-reverse;
                 text-align: right;
-            }
 
-            > *{
-                margin-left: 0;
-                margin-right: rem(8px);
+                > *{
+                    margin-left: 0;
+                    margin-right: rem(8px);
 
-                &:last-child {
-                    margin-right: 0;
+                    &:last-child {
+                        margin-left: 0;
+                    }
                 }
             }
         }
