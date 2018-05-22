@@ -3,32 +3,32 @@
 </span>
 
 <div class="igx-grid-toolbar__actions">
+    <!-- <button name="btnColumnChooser" *ngIf=" columnHidingUI && columnHidingUI.togglе"
+        igxButton igxRipple [igxToggleAction]=" columnHidingUI.toggle"> -->
+    <button igxButton="flat" name="btnColumnChooser"
+            *ngIf="shouldShowColumnHiding"
+                igxButton igxRipple
+    >
+        <div  class="igx-grid-toolbar__button-space">
+            <igx-icon *ngIf="hiddenColumnsCount > 0">visibility_off</igx-icon>
+            <igx-icon *ngIf="hiddenColumnsCount === 0">visibility</igx-icon>
+            <span>{{ hiddenColumnsCount }}</span>
+            <span>{{ getColumnHiddingText() }}</span>
+        </div>
+    </button>
+    <!-- <igx-column-hiding #columnHidingUI [columns]="columnList" [title]="columnHidingTitle"
+        (onColumnVisibilityChanged)="toggleColumnVisibility($event)" columnDisplayOrder="Alphabetical">
+    </igx-column-hiding> -->
 
-    <div *ngIf="shouldShowColumnHiding">
-        <!-- <button name="btnColumnChooser" *ngIf=" columnHidingUI && columnHidingUI.togglе"
-            igxButton igxRipple [igxToggleAction]=" columnHidingUI.toggle"> -->
-        <button igxButton="flat" name="btnColumnChooser"
-                    igxButton igxRipple >
-            <div  class="igx-grid-toolbar__button-space">
-                <igx-icon *ngIf="hiddenColumnsCount > 0">visibility_off</igx-icon>
-                <igx-icon *ngIf="hiddenColumnsCount === 0">visibility</igx-icon>
-                <span>{{ hiddenColumnsCount }}</span>
-                <span>{{ getColumnHiddingText() }}</span>
-            </div>
-        </button>
-        <!-- <igx-column-hiding #columnHidingUI [columns]="columnList" [title]="columnHidingTitle"
-            (onColumnVisibilityChanged)="toggleColumnVisibility($event)" columnDisplayOrder="Alphabetical">
-        </igx-column-hiding> -->
-    </div>
 
     <div class="igx-grid-toolbar__dropdown" *ngIf="shouldShowExportButton" id="btnExport">
         <button igxButton="flat" igxRipple #btnExport
                 (click)="exportClicked()">
-            <div class="igx-grid-toolbar__button-space">
+            <span class="igx-grid-toolbar__button-space">
                 <igx-icon fontSet="material" name="import_export"></igx-icon>
                 <span>{{ getExportText() }}</span>
                 <igx-icon fontSet="material" name="arrow_drop_down"></igx-icon>
-            </div>
+            </span>
         </button>
 
         <div igxToggle #directive="toggle" class="igx-filtering__options--to-left">

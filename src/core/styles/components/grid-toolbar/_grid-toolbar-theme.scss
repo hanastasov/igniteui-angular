@@ -165,6 +165,72 @@
                 color: --var($theme, 'button-focus-text-color');
             }
         }
+
+        %igx-grid-toolbar__button-space {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            > *{
+                margin-left: rem(8px);
+
+                &:first-child {
+                    margin-left: 0;
+                }
+            }
+        }
+
+        &[dir='rtl'] {
+            text-align: right;
+
+            %igx-button--flat,
+            %igx-button--icon {
+                margin-left: 0;
+                margin-right: rem(8);
+            }
+
+            %igx-grid-toolbar__button-space
+            {
+                flex-direction: row-reverse;
+                text-align: right;
+            }
+
+            > *{
+                margin-left: 0;
+                margin-right: rem(8px);
+
+                &:last-child {
+                    margin-right: 0;
+                }
+            }
+        }
+    }
+
+    [dir='rtl'] {
+        %igx-grid-toolbar {
+            text-align: right;
+
+            %igx-button--flat,
+            %igx-button--icon {
+                margin-left: 0;
+                margin-right: rem(8);
+            }
+
+            %igx-grid-toolbar__button-space
+            {
+                flex-direction: row-reverse;
+                text-align: right;
+            }
+
+            > *{
+                margin-left: 0;
+                margin-right: rem(8px);
+
+                &:last-child {
+                    margin-right: 0;
+                }
+            }
+        }
     }
 
     %grid-caption {
@@ -216,49 +282,4 @@
             color: --var($theme, 'item-focus-text-color');
         }
     }
-
-    %igx-grid-toolbar__button-space {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-
-        > *{
-            margin-left: rem(8px);
-
-            &:first-child {
-                margin-left: 0;
-            }
-        }
-    }
-
-    [dir='rtl'] {
-        %igx-grid-toolbar
-        {
-            flex-direction: row-reverse;
-            text-align: right;
-
-            %igx-button--flat,
-            %igx-button--icon {
-                margin-right: rem(8);
-                margin-left: 0;
-            }
-        }
-
-        %igx-grid-toolbar__button-space
-        {
-            flex-direction: row-reverse;
-            text-align: right;
-
-            > *{
-                margin-right: rem(0);
-
-                &:last-child {
-                    margin-right: 0;
-                }
-            }
-        }
-    }
 }
-
-
-
