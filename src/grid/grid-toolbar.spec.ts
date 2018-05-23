@@ -97,28 +97,28 @@ describe("IgxGrid - Grid Toolbar", () => {
         let exportButton = gridToolbar.query(By.css(".igx-grid-toolbar__dropdown#btnExport"));
         expect(exportButton).toBe(null);
 
-        testPage.grid1.toolbarExportExcel = true;
+        testPage.grid1.exportExcel = true;
         testPage.grid1.cdr.detectChanges();
         fixture.detectChanges();
 
         exportButton = gridToolbar.query(By.css(".igx-grid-toolbar__dropdown#btnExport"));
         expect(exportButton).not.toBe(null);
 
-        testPage.grid1.toolbarExportExcel = false;
+        testPage.grid1.exportExcel = false;
         testPage.grid1.cdr.detectChanges();
         fixture.detectChanges();
 
         exportButton = gridToolbar.query(By.css(".igx-grid-toolbar__dropdown#btnExport"));
         expect(exportButton).toBe(null);
 
-        testPage.grid1.toolbarExportCsv = true;
+        testPage.grid1.exportCsv = true;
         testPage.grid1.cdr.detectChanges();
         fixture.detectChanges();
 
         exportButton = gridToolbar.query(By.css(".igx-grid-toolbar__dropdown#btnExport"));
         expect(exportButton).not.toBe(null);
 
-        testPage.grid1.toolbarExportCsv = false;
+        testPage.grid1.exportCsv = false;
         testPage.grid1.cdr.detectChanges();
         fixture.detectChanges();
 
@@ -141,14 +141,14 @@ describe("IgxGrid - Grid Toolbar", () => {
         let exportButton = gridToolbar.query(By.css("li#btnExportExcel"));
         expect(exportButton).toBe(null);
 
-        testPage.grid1.toolbarExportExcel = true;
+        testPage.grid1.exportExcel = true;
         testPage.grid1.cdr.detectChanges();
         fixture.detectChanges();
 
         exportButton = gridToolbar.query(By.css("li#btnExportExcel"));
         expect(exportButton).not.toBe(null);
 
-        testPage.grid1.toolbarExportExcel = false;
+        testPage.grid1.exportExcel = false;
         testPage.grid1.cdr.detectChanges();
         fixture.detectChanges();
 
@@ -171,14 +171,14 @@ describe("IgxGrid - Grid Toolbar", () => {
         let exportButton = gridToolbar.query(By.css("li#btnExportCsv"));
         expect(exportButton).toBe(null);
 
-        testPage.grid1.toolbarExportCsv = true;
+        testPage.grid1.exportCsv = true;
         testPage.grid1.cdr.detectChanges();
         fixture.detectChanges();
 
         exportButton = gridToolbar.query(By.css("li#btnExportCsv"));
         expect(exportButton).not.toBe(null);
 
-        testPage.grid1.toolbarExportCsv = false;
+        testPage.grid1.exportCsv = false;
         testPage.grid1.cdr.detectChanges();
         fixture.detectChanges();
 
@@ -192,8 +192,8 @@ describe("IgxGrid - Grid Toolbar", () => {
         const testPage = fixture.componentInstance;
 
         testPage.grid1.showToolbar = true;
-        testPage.grid1.toolbarExportExcel = true;
-        testPage.grid1.toolbarExportCsv = true;
+        testPage.grid1.exportExcel = true;
+        testPage.grid1.exportCsv = true;
         testPage.grid1.cdr.detectChanges();
         fixture.detectChanges();
 
@@ -226,7 +226,7 @@ describe("IgxGrid - Grid Toolbar", () => {
         const testPage = fixture.componentInstance;
 
         testPage.grid1.showToolbar = true;
-        testPage.grid1.toolbarExportExcel = true;
+        testPage.grid1.exportExcel = true;
         testPage.grid1.cdr.detectChanges();
         fixture.detectChanges();
 
@@ -252,7 +252,7 @@ describe("IgxGrid - Grid Toolbar", () => {
         const testPage = fixture.componentInstance;
 
         testPage.grid1.showToolbar = true;
-        testPage.grid1.toolbarExportExcel = true;
+        testPage.grid1.exportExcel = true;
         testPage.grid1.cdr.detectChanges();
         fixture.detectChanges();
 
@@ -277,7 +277,7 @@ describe("IgxGrid - Grid Toolbar", () => {
         const testPage = fixture.componentInstance;
 
         testPage.grid1.showToolbar = true;
-        testPage.grid1.toolbarExportCsv = true;
+        testPage.grid1.exportCsv = true;
         testPage.grid1.cdr.detectChanges();
         fixture.detectChanges();
 
@@ -303,7 +303,7 @@ describe("IgxGrid - Grid Toolbar", () => {
         const testPage = fixture.componentInstance;
 
         testPage.grid1.showToolbar = true;
-        testPage.grid1.toolbarExportCsv = true;
+        testPage.grid1.exportCsv = true;
         testPage.grid1.cdr.detectChanges();
         fixture.detectChanges();
 
