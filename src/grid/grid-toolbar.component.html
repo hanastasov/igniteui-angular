@@ -3,7 +3,6 @@
 </span>
 
 <div class="igx-grid-toolbar__actions">
-
     <div *ngIf="grid.columnHiding">
         <button igxButton="flat" name="btnColumnChooser" igxButton igxRipple
             [igxToggleAction]="toolbarHidingUI.toggle">
@@ -22,11 +21,11 @@
     <div class="igx-grid-toolbar__dropdown" *ngIf="shouldShowExportButton" id="btnExport">
         <button igxButton="flat" igxRipple #btnExport
                 (click)="exportClicked()">
-            <div class="igx-grid-toolbar__button-space">
+            <span class="igx-grid-toolbar__button-space">
                 <igx-icon fontSet="material" name="import_export"></igx-icon>
                 <span>{{ getExportText() }}</span>
                 <igx-icon fontSet="material" name="arrow_drop_down"></igx-icon>
-            </div>
+            </span>
         </button>
 
         <div igxToggle #directive="toggle" class="igx-filtering__options--to-left">
