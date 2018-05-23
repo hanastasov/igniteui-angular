@@ -2,6 +2,7 @@ import { AnimationBuilder } from "@angular/animations";
 import { Component, DebugElement, ViewChild } from "@angular/core";
 import { async, fakeAsync, TestBed, tick } from "@angular/core/testing";
 import { By } from "@angular/platform-browser";
+import { IgxCsvExporterService, IgxExcelExporterService } from "../services/index";
 import { IgxGridToolbarComponent } from "./grid-toolbar.component";
 import { IgxGridComponent } from "./grid.component";
 import { IgxGridModule } from "./index";
@@ -17,7 +18,9 @@ describe("IgxGrid - Grid Toolbar", () => {
                 IgxGridModule.forRoot()
             ],
             providers: [
-                AnimationBuilder
+                AnimationBuilder,
+                IgxExcelExporterService,
+                IgxCsvExporterService
             ]
         })
         .compileComponents();
@@ -215,6 +218,108 @@ describe("IgxGrid - Grid Toolbar", () => {
 
         toggleDiv = dropDown.query(By.css("div.igx-toggle--hidden"));
         expect(toggleDiv).not.toBe(null);
+    });
+
+    it("testing excel export starting event (cancel)", () => {
+        const fixture = TestBed.createComponent(GridToolbarTestPage1Component);
+        fixture.detectChanges();
+        const testPage = fixture.componentInstance;
+
+        testPage.grid1.showToolbar = true;
+        testPage.grid1.toolbarExportExcel = true;
+        testPage.grid1.cdr.detectChanges();
+        fixture.detectChanges();
+
+        const grid = fixture.debugElement.query(By.css("igx-grid"));
+        const gridToolbar = grid.query(By.css("igx-grid-toolbar"));
+        const dropDown = gridToolbar.query(By.css(".igx-grid-toolbar__dropdown#btnExport"));
+        const exportExcelButton = dropDown.query(By.css("li#btnExportExcel"));
+
+        testPage.grid1.onToolbarExporting.subscribe((args) => {
+            expect(args.grid).not.toBe(null);
+            expect(args.exporter).not.toBe(null);
+            expect(args.type).toBe("excel");
+            expect(args.cancel).toBe(false);
+            args.cancel = true;
+        });
+
+        exportExcelButton.nativeElement.click();
+    });
+
+    it("testing excel export starting event (non-cancel)", () => {
+        const fixture = TestBed.createComponent(GridToolbarTestPage1Component);
+        fixture.detectChanges();
+        const testPage = fixture.componentInstance;
+
+        testPage.grid1.showToolbar = true;
+        testPage.grid1.toolbarExportExcel = true;
+        testPage.grid1.cdr.detectChanges();
+        fixture.detectChanges();
+
+        const grid = fixture.debugElement.query(By.css("igx-grid"));
+        const gridToolbar = grid.query(By.css("igx-grid-toolbar"));
+        const dropDown = gridToolbar.query(By.css(".igx-grid-toolbar__dropdown#btnExport"));
+        const exportExcelButton = dropDown.query(By.css("li#btnExportExcel"));
+
+        testPage.grid1.onToolbarExporting.subscribe((args) => {
+            expect(args.grid).not.toBe(null);
+            expect(args.exporter).not.toBe(null);
+            expect(args.type).toBe("excel");
+            expect(args.cancel).toBe(false);
+        });
+
+        exportExcelButton.nativeElement.click();
+    });
+
+    it("testing csv export starting event (cancel)", () => {
+        const fixture = TestBed.createComponent(GridToolbarTestPage1Component);
+        fixture.detectChanges();
+        const testPage = fixture.componentInstance;
+
+        testPage.grid1.showToolbar = true;
+        testPage.grid1.toolbarExportCsv = true;
+        testPage.grid1.cdr.detectChanges();
+        fixture.detectChanges();
+
+        const grid = fixture.debugElement.query(By.css("igx-grid"));
+        const gridToolbar = grid.query(By.css("igx-grid-toolbar"));
+        const dropDown = gridToolbar.query(By.css(".igx-grid-toolbar__dropdown#btnExport"));
+        const exportCsvButton = dropDown.query(By.css("li#btnExportCsv"));
+
+        testPage.grid1.onToolbarExporting.subscribe((args) => {
+            expect(args.grid).not.toBe(null);
+            expect(args.exporter).not.toBe(null);
+            expect(args.type).toBe("csv");
+            expect(args.cancel).toBe(false);
+            args.cancel = true;
+        });
+
+        exportCsvButton.nativeElement.click();
+    });
+
+    it("testing csv export starting event (non-cancel)", () => {
+        const fixture = TestBed.createComponent(GridToolbarTestPage1Component);
+        fixture.detectChanges();
+        const testPage = fixture.componentInstance;
+
+        testPage.grid1.showToolbar = true;
+        testPage.grid1.toolbarExportCsv = true;
+        testPage.grid1.cdr.detectChanges();
+        fixture.detectChanges();
+
+        const grid = fixture.debugElement.query(By.css("igx-grid"));
+        const gridToolbar = grid.query(By.css("igx-grid-toolbar"));
+        const dropDown = gridToolbar.query(By.css(".igx-grid-toolbar__dropdown#btnExport"));
+        const exportCsvButton = dropDown.query(By.css("li#btnExportCsv"));
+
+        testPage.grid1.onToolbarExporting.subscribe((args) => {
+            expect(args.grid).not.toBe(null);
+            expect(args.exporter).not.toBe(null);
+            expect(args.type).toBe("csv");
+            expect(args.cancel).toBe(false);
+        });
+
+        exportCsvButton.nativeElement.click();
     });
 
 });

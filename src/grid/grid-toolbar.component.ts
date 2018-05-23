@@ -35,28 +35,20 @@ export class IgxGridToolbarComponent implements IGridBus {
     @ViewChild(IgxToggleDirective, { read: IgxToggleDirective })
     protected toggleDirective: IgxToggleDirective;
 
-    public get shouldShowColumnHiding(): boolean {
-        // should check the grid's "columnHiding" property
-        return true;
+    public get grid(): IgxGridComponent {
+        return this.gridAPI.get(this.gridID);
     }
 
     public get shouldShowExportButton(): boolean {
-        const igxGrid = this.gridAPI.get(this.gridID);
-        return (igxGrid != null && (igxGrid.toolbarExportExcel || igxGrid.toolbarExportCsv));
+        return (this.grid != null && (this.grid.toolbarExportExcel || this.grid.toolbarExportCsv));
     }
 
     public get shouldShowExportExcelButton(): boolean {
-        const igxGrid = this.gridAPI.get(this.gridID);
-        return igxGrid.toolbarExportExcel;
+        return this.grid.toolbarExportExcel;
     }
 
     public get shouldShowExportCsvButton(): boolean {
-        const igxGrid = this.gridAPI.get(this.gridID);
-        return igxGrid.toolbarExportCsv;
-    }
-
-    public get hiddenColumnsCount(): number {
-        return 1;
+        return this.grid.toolbarExportCsv;
     }
 
     private _exportEventSubscription;
@@ -68,29 +60,19 @@ export class IgxGridToolbarComponent implements IGridBus {
     }
 
     public getTitle(): string {
-        const igxGrid = this.gridAPI.get(this.gridID);
-        return igxGrid != null ? igxGrid.toolbarTitle : "";
-    }
-
-    public getColumnHiddingText(): string {
-        const igxGrid = this.gridAPI.get(this.gridID);
-        // return igxGrid != null ? igxGrid.columnHiddingText : "";
-        return "hidden";
+        return this.grid != null ? this.grid.toolbarTitle : "";
     }
 
     public getExportText(): string {
-        const igxGrid = this.gridAPI.get(this.gridID);
-        return igxGrid != null ? igxGrid.exportText : "";
+        return this.grid != null ? this.grid.exportText : "";
     }
 
     public getExportExcelText(): string {
-        const igxGrid = this.gridAPI.get(this.gridID);
-        return igxGrid != null ? igxGrid.exportExcelText : "";
+        return this.grid != null ? this.grid.exportExcelText : "";
     }
 
     public getExportCsvText(): string {
-        const igxGrid = this.gridAPI.get(this.gridID);
-        return igxGrid != null ? igxGrid.exportCsvText : "";
+        return this.grid != null ? this.grid.exportCsvText : "";
     }
 
     public exportClicked() {
@@ -99,33 +81,32 @@ export class IgxGridToolbarComponent implements IGridBus {
 
     public exportToExcelClicked() {
         this.toggleDirective.collapsed = !this.toggleDirective.collapsed;
-        const igxGrid = this.gridAPI.get(this.gridID);
-        const args = { grid: igxGrid, exporter: this.excelExporter, type: "excel", cancel: false };
-        igxGrid.onToolbarExporting.emit(args);
+        const args = { grid: this.grid, exporter: this.excelExporter, type: "excel", cancel: false };
+        this.grid.onToolbarExporting.emit(args);
         if (args.cancel) {
             return;
         }
         this._exportEventSubscription = this.excelExporter.onExportEnded.subscribe((ev) => this._exportEndedHandler());
         // show busy indicator here
-        this.excelExporter.export(igxGrid, new IgxExcelExporterOptions("ExportedData"));
+        this.excelExporter.export(this.grid, new IgxExcelExporterOptions("ExportedData"));
     }
 
     public exportToCsvClicked() {
         this.toggleDirective.collapsed = !this.toggleDirective.collapsed;
-        const igxGrid = this.gridAPI.get(this.gridID);
-        const args = { grid: igxGrid, exporter: this.csvExporter, type: "csv", cancel: false };
-        igxGrid.onToolbarExporting.emit(args);
+        const args = { grid: this.grid, exporter: this.csvExporter, type: "csv", cancel: false };
+        this.grid.onToolbarExporting.emit(args);
         if (args.cancel) {
             return;
         }
         this._exportEventSubscription = this.csvExporter.onExportEnded.subscribe((ev) => this._exportEndedHandler());
         // show busy indicator here
-        this.csvExporter.export(igxGrid, new IgxCsvExporterOptions("ExportedData", CsvFileTypes.CSV));
+        this.csvExporter.export(this.grid, new IgxCsvExporterOptions("ExportedData", CsvFileTypes.CSV));
     }
 
     private _exportEndedHandler() {
         if (this._exportEventSubscription) {
             this._exportEventSubscription.unsubscribe();
+            this._exportEventSubscription = null;
         }
         // hide busy indicator here
     }

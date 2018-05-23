@@ -3,42 +3,25 @@
     <section class="sample-content">
         <article class="grid-sample">
 
-            <!-- <div class="toggles-container">
-                Toggel Grid Toolbar's Buttons
-                <div class="toggle-group">
-                    <div class="switch-group">
-                        <span igxLabel>Column Chooser</span>
-                        <igx-switch [(ngModel)]="grid1.toolbar.showColumnChooser"></igx-switch>
-                    </div>
-                    <div class="switch-group">
-                        <span igxLabel>Pinning Chooser</span>
-                        <igx-switch [(ngModel)]="grid1.toolbar.showPinningChooser"></igx-switch>
-                    </div>
-                </div>
-            </div> -->
-
             <igx-grid #grid1 [data]="data" [autoGenerate]="true" height="400px" width="600px"
             
-            [showToolbar]="true"
-            toolbarTitle="Grid Toolbar"
-            [toolbarExportExcel]="true"
-            [toolbarExportCsv]="true"
-            exportText="Export"
-            exportExcelText="Export to Excel"
-            exportCsvText="Export to CSV"
+                [showToolbar]="true"
+                toolbarTitle="Grid Toolbar"
 
-            (onToolbarExporting)="toolbarExportClicked($event)"
+                [columnHiding]="true"
+                columnHidingText="Hidden"
+                columnHidingTitle="Column Hiding"
+                
+                [toolbarExportExcel]="true"
+                [toolbarExportCsv]="true"
+                exportText="Export"
+                exportExcelText="Export to Excel"
+                exportCsvText="Export to CSV"
 
+                (onToolbarExporting)="toolbarExportClicked($event)"
             >
             </igx-grid>
 
-            <button (click)="buttonClicked()">Test</button>
-
         </article>
     </section>
-
-
-
-
-
 </div>
