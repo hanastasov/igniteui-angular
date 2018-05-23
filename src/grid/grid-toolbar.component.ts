@@ -40,15 +40,15 @@ export class IgxGridToolbarComponent implements IGridBus {
     }
 
     public get shouldShowExportButton(): boolean {
-        return (this.grid != null && (this.grid.toolbarExportExcel || this.grid.toolbarExportCsv));
+        return (this.grid != null && (this.grid.exportExcel || this.grid.exportCsv));
     }
 
     public get shouldShowExportExcelButton(): boolean {
-        return this.grid.toolbarExportExcel;
+        return this.grid.exportExcel;
     }
 
     public get shouldShowExportCsvButton(): boolean {
-        return this.grid.toolbarExportCsv;
+        return this.grid.exportCsv;
     }
 
     private _exportEventSubscription;
