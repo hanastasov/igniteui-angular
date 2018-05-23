@@ -15,6 +15,19 @@ export class RemoteService {
     private url: string = "http://services.odata.org/V4/Northwind/Northwind.svc/Products";
     private _remoteData: BehaviorSubject<any[]>;
 
+    private dummyData = [
+        {   ProductID: 0, ProductName: "••••••", UnitPrice: 0, UnitsInStock: 0, UnitsOnOrder: 0, QuantityPerUnit: "••••••", Discontinued: false},
+        {   ProductID: 0, ProductName: "••••••", UnitPrice: 0, UnitsInStock: 0, UnitsOnOrder: 0, QuantityPerUnit: "••••••", Discontinued: false},
+        {   ProductID: 0, ProductName: "••••••", UnitPrice: 0, UnitsInStock: 0, UnitsOnOrder: 0, QuantityPerUnit: "••••••", Discontinued: false},
+        {   ProductID: 0, ProductName: "••••••", UnitPrice: 0, UnitsInStock: 0, UnitsOnOrder: 0, QuantityPerUnit: "••••••", Discontinued: false},
+        {   ProductID: 0, ProductName: "••••••", UnitPrice: 0, UnitsInStock: 0, UnitsOnOrder: 0, QuantityPerUnit: "••••••", Discontinued: false},
+        {   ProductID: 0, ProductName: "••••••", UnitPrice: 0, UnitsInStock: 0, UnitsOnOrder: 0, QuantityPerUnit: "••••••", Discontinued: false},
+        {   ProductID: 0, ProductName: "••••••", UnitPrice: 0, UnitsInStock: 0, UnitsOnOrder: 0, QuantityPerUnit: "••••••", Discontinued: false},
+        {   ProductID: 0, ProductName: "••••••", UnitPrice: 0, UnitsInStock: 0, UnitsOnOrder: 0, QuantityPerUnit: "••••••", Discontinued: false},
+        {   ProductID: 0, ProductName: "••••••", UnitPrice: 0, UnitsInStock: 0, UnitsOnOrder: 0, QuantityPerUnit: "••••••", Discontinued: false},
+        {   ProductID: 0, ProductName: "••••••", UnitPrice: 0, UnitsInStock: 0, UnitsOnOrder: 0, QuantityPerUnit: "••••••", Discontinued: false}
+    ];
+
     constructor(private http: Http) {
         this._remoteData = new BehaviorSubject([]);
         this.remoteData = this._remoteData.asObservable();
@@ -22,6 +35,14 @@ export class RemoteService {
 
     public getData(data?: IForOfState, cb?: (any) => void): any {
         var dataState = data;
+
+        if (dataState.chunkSize > 0) {
+            this._remoteData.next(this.dummyData);
+            if (cb) {
+                cb(this.dummyData);
+            }
+        }
+
         return this.http.get(this.buildUrl(dataState)).pipe(
             map((response) => response.json()),
             map((response) => {
