@@ -46,6 +46,7 @@ import { TabsSampleModule } from "./tabs/sample.module";
 import { IgxTimePickerSampleModule } from "./time-picker/sample.module";
 import { IgxToastSampleModule } from "./toast/sample.module";
 import { VirtualForSampleModule } from "./virtual-for-directive/sample.module";
+import { IgxChipsSampleModule } from "./chips/sample.module";
 
 @NgModule({
     bootstrap: [AppComponent],
@@ -100,7 +101,8 @@ import { VirtualForSampleModule } from "./virtual-for-directive/sample.module";
         ListPerformanceSampleModule,
         VirtualForSampleModule,
         IgxTimePickerSampleModule,
-        MaskSampleModule
+        MaskSampleModule,
+        IgxChipsSampleModule
     ],
     providers: [IgxNavigationService]
 })

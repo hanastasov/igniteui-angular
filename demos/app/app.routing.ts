@@ -32,6 +32,7 @@ import { RippleSampleComponent } from "./ripple/sample.component";
 import { IgxSliderSampleComponent } from "./slider/sample.component";
 import { IgxSnackbarSampleComponent } from "./snackbar/sample.component";
 import { IgxColorsSampleComponent } from "./styleguide/colors/sample.component";
+import { IgxChipsSampleComponent } from "./chips/sample.component";
 import { IgxShadowsSampleComponent } from "./styleguide/shadows/sample.component";
 import { IgxTypographySampleComponent } from "./styleguide/typography/sample.component";
 import {
@@ -197,6 +198,10 @@ const appRoutes: Routes = [
     {
         component: GridVirtualizationSampleComponent,
         path: "gridRemoteVirtualization"
+    },
+    {
+        component: IgxChipsSampleComponent,
+        path: "chips"
     }
 ];
 
