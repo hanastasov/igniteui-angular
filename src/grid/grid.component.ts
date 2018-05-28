@@ -1029,9 +1029,10 @@ export class IgxGridComponent implements OnInit, OnDestroy, AfterContentInit, Af
         let maxSummaryLength = 0;
         this.columnList.filter((col) => col.hasSummary).forEach((column) => {
             this.gridAPI.set_summary_by_column_name(this.id, column.field);
-            const currentLength = this.gridAPI.get_summaries(this.id).get(column.field).length;
-            if (maxSummaryLength < currentLength) {
-                maxSummaryLength = currentLength;
+            const getCurrentSummaryColumn = this.gridAPI.get_summaries(this.id).get(column.field).length;
+            // if (getCurrentSummaryColumn) {
+            if (maxSummaryLength < getCurrentSummaryColumn) {
+                maxSummaryLength = getCurrentSummaryColumn;
             }
         });
         return maxSummaryLength * (this.tfoot.nativeElement.clientHeight ? this.tfoot.nativeElement.clientHeight : DEFAULT_SUMMARY_HEIGHT);

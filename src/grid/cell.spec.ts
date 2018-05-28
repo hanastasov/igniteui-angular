@@ -225,7 +225,10 @@ describe("IgxGrid - Cell component", () => {
             expect(firstCell).toBe(fix.componentInstance.clickedCell);
         });
     }));
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
     it("edit mode", async(() => {
         const fix = TestBed.createComponent(DefaultGridComponent);
         fix.detectChanges();
